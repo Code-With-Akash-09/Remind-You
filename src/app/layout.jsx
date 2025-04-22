@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
 			>
 				<body
 					className={cn(
-						"h-dvh w-screen overflow-hidden bg-white dark:bg-gray-950 text-gray-950 dark:text-gray-50 antialiased",
+						"h-dvh w-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-950 dark:text-gray-50 antialiased",
 						geist.className
 					)}
 					suppressHydrationWarning
