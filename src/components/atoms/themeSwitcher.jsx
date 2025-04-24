@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/ui/button"
-import { MoonIcon, SunIcon } from "lucide-react"
+import { MoonStarIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 
 const ThemeSwitcher = () => {
@@ -11,12 +11,13 @@ const ThemeSwitcher = () => {
 		<Button
 			size="icon"
 			variant="outline"
+			suppressHydrationWarning
 			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
 		>
 			{theme === "dark" ? (
-				<MoonIcon className="h-4 w-4" />
+				<MoonStarIcon className="size-4" />
 			) : (
-				<SunIcon className="h-4 w-4" />
+				<SunIcon className="size-4" />
 			)}
 		</Button>
 	)

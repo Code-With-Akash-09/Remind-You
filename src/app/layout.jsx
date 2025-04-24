@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils"
 import Analytics from "@/providers/analytics"
 import QueryParamsProvider from "@/providers/queryParams"
 import { TooltipProvider } from "@/ui/tooltip"
+import { ThemeProvider } from "next-themes"
 import { ViewTransitions } from "next-view-transitions"
 import { Geist } from "next/font/google"
 import { Suspense } from "react"
@@ -39,16 +40,24 @@ export default function RootLayout({ children }) {
 					)}
 					suppressHydrationWarning
 				>
-					<Suspense>
-						<QueryParamsProvider />
-					</Suspense>
-					<TooltipProvider>
-						<div className="flex h-full flex-col overflow-hidden">
-							{children}
-						</div>
-						<Toaster richColors />
-					</TooltipProvider>
-					<Analytics />
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="light"
+						enableSystem
+						suppressHydrationWarning
+						disableTransitionOnChange
+					>
+						<Suspense>
+							<QueryParamsProvider />
+						</Suspense>
+						<TooltipProvider>
+							<div className="flex h-full w-full flex-col overflow-hidden">
+								{children}
+							</div>
+							<Toaster richColors />
+						</TooltipProvider>
+						<Analytics />
+					</ThemeProvider>
 				</body>
 			</html>
 		</ViewTransitions>

@@ -1,684 +1,152 @@
-"use client";
+"use client"
 
-import {
-	getProfile,
-	reSendOTP,
-	sendOTP,
-	setProfile,
-	verifyOTP,
-} from "@/actions/auth";
-import useMediaQuery from "@/hooks/useMediaQuery";
-import { getType } from "@/lib/utils";
-import Autocomplete from "@/molecules/autocomplete";
-import cookieService from "@/services/cookie";
-import useRemindYouStore from "@/store";
-import { Button } from "@/ui/button";
-import { Dialog, DialogContent } from "@/ui/dialog";
-import { Drawer, DrawerContent } from "@/ui/drawer";
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormLabel,
-	FormMessage,
-} from "@/ui/form";
-import { Input } from "@/ui/input";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/ui/input-otp";
-import { Label } from "@/ui/label";
-import { zodResolver } from "@hookform/resolvers/zod";
-// import * as Sentry from "@sentry/nextjs"
-import IPData from "ipdata";
-import { PencilIcon } from "lucide-react";
-import { Link } from "next-view-transitions";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { getProfile, logIn, signUp } from "@/actions/auth"
+import Loading from "@/atoms/loading"
+import Logo from "@/atoms/logo"
+import cookieService from "@/services/cookie"
+import useRemindYouStore from "@/store"
+import { Button } from "@/ui/button"
+import { Dialog, DialogContent, DialogHeader } from "@/ui/dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
+import { Input } from "@/ui/input"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { DialogTitle } from "@radix-ui/react-dialog"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
-const AUTO_AUTH_TIMER = 5; // in seconds
+const AuthProvider = ({ children }) => {
 
-const AuthProvider = ({
-	children,
-	withPrompt = false,
-	prompt = {
-		closable: true,
-		time: AUTO_AUTH_TIMER,
-	},
-	withForm = true,
-}) => {
-	const isAuthenticated = useRemindYouStore((store) => store.isAuthenticated);
-	const launchCode = useRemindYouStore((store) => store.queryParams.launchCode);
-	const dispatch = useRemindYouStore((store) => store.dispatch);
+	const [loading, setLoading] = useState(false)
+	const [open, setOpen] = useState(false)
+	const isAuthenticated = useRemindYouStore(state => state.isAuthenticated)
+	const dispatch = useRemindYouStore((state) => state.dispatch)
 
-	useEffect(() => {
-		if (isAuthenticated) return;
-		const token = cookieService.getToken("access") || launchCode;
+	const getUserProfile = async (token) => {
+		const { data = null } = await getProfile(token)
 
-		if (token)
-			getProfile(token).then(({ error, message, data: user }) => {
-				if (error) {
-					toast.error(message);
-					return;
-				}
-				dispatch({
-					type: "SET_STATE",
-					payload: {
-						user,
-						authId: null,
-						openAuth: false,
-						isAuthenticated: true,
-						closableAuth: true,
-					},
-				});
-			});
-		else if (children)
+		if (data) {
 			dispatch({
 				type: "SET_STATE",
-				payload: { openAuth: true, closableAuth: !children },
-			});
+				payload: {
+					user: data.result,
+					isAuthenticated: true,
+					openAuth: false,
+				}
+			})
+			setOpen(true)
+		} else {
+			dispatch({
+				type: "SET_STATE",
+				payload: {
+					user: null,
+					isAuthenticated: false,
+					openAuth: true,
+				}
+			})
+			setOpen(true)
+		}
+		setLoading(false)
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [launchCode]);
+	}
+
+	useEffect(() => {
+		setLoading(true)
+		const token = cookieService.getToken("access")
+		if (token) getUserProfile(token)
+	}, [isAuthenticated])
+
+	if (loading) return (
+		<div className="flex w-full items-center justify-center  h-full">
+			<Loading />
+		</div>
+	)
 
 	return (
 		<>
-			{children &&
-				(isAuthenticated ? children : <div className="h-screen"></div>)}
-			{withPrompt && <AuthPrompter {...prompt} />}
-			{withForm && <AuthForm />}
-		</>
-	);
-};
-
-export default AuthProvider;
-
-export const useAuthPrompter = ({
-	closable = true,
-	time = AUTO_AUTH_TIMER,
-}) => {
-	const isAuthenticated = useRemindYouStore((store) => store.isAuthenticated);
-	const dispatch = useRemindYouStore((store) => store.dispatch);
-
-	useEffect(() => {
-		if (!isAuthenticated) {
-			const timer = setTimeout(() => {
-				dispatch({
-					type: "SET_STATE",
-					payload: { openAuth: true, closableAuth: closable },
-				});
-			}, 1000 * time);
-
-			return () => clearTimeout(timer);
-		}
-	}, [closable, dispatch, isAuthenticated, time]);
-
-	return null;
-};
-
-export const AuthPrompter = useAuthPrompter;
-
-export const useAuthenticator = () => {
-	const router = useRouter();
-
-	const isAuthenticated = useRemindYouStore((store) => store.isAuthenticated);
-	const dispatch = useRemindYouStore((store) => store.dispatch);
-
-	const [callback, setCallback] = useState(null);
-
-	const authenticate =
-		({ cb, route }) =>
-		(e) => {
-			e?.preventDefault();
-
-			if (route && !getType(cb).includes("Function"))
-				cb = () => router.push(route);
-
-			if (!isAuthenticated) {
-				setCallback(() => cb);
-				dispatch({
-					type: "SET_STATE",
-					payload: { openAuth: true, closableAuth: !cb },
-				});
-			} else {
-				cb?.();
-			}
-		};
-
-	useEffect(() => {
-		if (isAuthenticated && callback) {
-			callback();
-			setCallback(null);
-		}
-	}, [isAuthenticated, callback]);
-
-	return { authenticate };
-};
-
-export const withAuth = (WrappedComponent) => {
-	const WithAuth = (props) => {
-		const isAuthenticated = useRemindYouStore((store) => store.isAuthenticated);
-		const dispatch = useRemindYouStore((store) => store.dispatch);
-
-		useEffect(() => {
-			if (!isAuthenticated) {
-				dispatch({
-					type: "SET_STATE",
-					payload: { openAuth: true, closableAuth: false },
-				});
-			}
-		}, [isAuthenticated, dispatch]);
-
-		// If not authenticated, return null or you can return a loading state or redirect to login
-		if (!isAuthenticated) return null;
-
-		// Return the wrapped component with the passed props
-		return <WrappedComponent {...props} />;
-	};
-
-	// Set display name for debugging purposes
-	WithAuth.displayName = `WithAuth(${
-		WrappedComponent.displayName || WrappedComponent.name || "Component"
-	})`;
-
-	return WithAuth;
-};
-
-export const AuthElement = ({
-	as: Element = "button",
-	href,
-	onClick,
-	children,
-	...props
-}) => {
-	const { authenticate } = useAuthenticator();
-
-	// Handle case where 'Link' is passed as the element type
-	if (["a", "Link"].includes(Element)) {
-		console.warn(
-			"WARNING: Link is not supported in AuthElement and will be ignored"
-		);
-		return (
-			<Element
-				{...{
-					href,
-					onClick,
-				}}
-				{...props}
-			>
+			<div className="flex w-full h-full">
+				{
+					isAuthenticated ? (
+						<Dialog open={open} onOpenChange={() => setOpen(false)}>
+							<DialogContent className="!max-w-sm dark:!border-neutral-700">
+								<DialogHeader>
+									<DialogTitle className="items-center justify-center flex">
+										<Logo />
+									</DialogTitle>
+								</DialogHeader>
+								<Tabs defaultValue="login">
+									<TabsList className={"w-full"}>
+										<TabsTrigger value="login">
+											Log In
+										</TabsTrigger>
+										<TabsTrigger value="signup">
+											Sign Up
+										</TabsTrigger>
+									</TabsList>
+									<TabsContent value="login">
+										<LogInForm setOpen={setOpen} />
+									</TabsContent>
+									<TabsContent value="signup">
+										<SignUpForm setOpen={setOpen} />
+									</TabsContent>
+								</Tabs>
+							</DialogContent>
+						</Dialog>
+					) : null
+				}
 				{children}
-			</Element>
-		);
+			</div>
+		</>
+	)
+}
+
+export default AuthProvider
+
+
+const SignUpForm = ({ setOpen }) => {
+
+	const [loading, setLoading] = useState(false)
+	const dispatch = useRemindYouStore((state) => state.dispatch)
+
+	const form = useForm({
+		resolver: zodResolver(SignupSchema),
+	})
+
+	const onSubmit = async (values) => {
+		setLoading(true)
+
+		await signUp(values)
+			.then(result => {
+				setLoading(false)
+				setOpen(false)
+				form.reset()
+				toast.success(result.data.message)
+				dispatch({
+					type: "SET_STATE",
+					payload: {
+						isAuthenticated: true,
+						openAuth: false,
+					}
+				})
+				console.log(result.data.token);
+
+				cookieService.setTokens({
+					accessToken: result.data.token
+				})
+			})
+			.catch(err => {
+				setLoading(false)
+				setOpen(true)
+				toast.err(err.data.error)
+			})
 	}
 
-	// If the element is a 'Button', use the Button component
-	if (Element === "Button") Element = Button;
-
-	const handleClick = (e) => {
-		e.preventDefault();
-
-		if (href) {
-			authenticate({ route: href })(e);
-		} else {
-			authenticate(
-				typeof onClick === "function" ? { cb: () => onClick(e) } : {}
-			)(e);
-		}
-	};
-
 	return (
-		<Element onClick={handleClick} href={href} {...props}>
-			{children}
-		</Element>
-	);
-};
-
-const AuthForm = () => {
-	const authId = useRemindYouStore((store) => store.authId);
-	const openAuth = useRemindYouStore((store) => store.openAuth);
-	const closableAuth = useRemindYouStore((store) => store.closableAuth);
-	const queryParams = useRemindYouStore((store) => store.queryParams);
-	const dispatch = useRemindYouStore((store) => store.dispatch);
-
-	const [loading, setLoading] = useState(false);
-	const [phoneNumber, setPhoneNumber] = useState({
-		phoneNumber: "",
-	});
-	const [type, setType] = useState(0);
-
-	const editNumber = () => setType(0);
-
-	const isMD = useMediaQuery("(min-width: 768px)");
-
-	const closeAuth = () =>
-		type === 0 && closableAuth
-			? dispatch({
-					type: "SET_STATE",
-					payload: { openAuth: false },
-			  })
-			: undefined;
-
-	const handlePostVerification = async (token) => {
-		const { error, message, data: user } = await getProfile(token);
-
-		if (error) {
-			toast.error(message);
-			return;
-		}
-
-		// const userMetaData = user
-		// Sentry.setUser(userMetaData)
-
-		dispatch({
-			type: "SET_STATE",
-			payload: {
-				user,
-				authId: null,
-				openAuth: false,
-				isAuthenticated: true,
-				closableAuth: true,
-			},
-		});
-		setTimeout(() => {
-			setType(0);
-		}, 500);
-	};
-
-	const onSubmit = (values) => {
-		setLoading(true);
-
-		const handleOTP = () => {
-			setPhoneNumber(values);
-			sendOTP({
-				...values,
-				utm: queryParams,
-			})
-				.then(({ error, message, data }) => {
-					setLoading(false);
-					if (error) {
-						toast.error(message);
-						return;
-					}
-
-					toast.info(OTP_ATTEMPTS[0].message);
-					dispatch({
-						type: "SET_STATE",
-						payload: { authId: data },
-					});
-					setType(1);
-				})
-				.catch((e) => {
-					console.error(e);
-					setLoading(false);
-				});
-		};
-
-		const handleVerifyOTP = () => {
-			verifyOTP({ ...values, id: authId, ...phoneNumber })
-				.then(({ error, message, data }) => {
-					setLoading(false);
-					if (error) {
-						toast.error(message);
-						return;
-					}
-
-					const token = data.token;
-
-					cookieService.setTokens({
-						accessToken: token,
-					});
-
-					if (data.isNew) setType(2);
-					else handlePostVerification(token);
-				})
-				.catch((e) => {
-					console.error(e);
-					setLoading(false);
-				});
-		};
-
-		const handleProfileUpdate = () => {
-			const location = values.location;
-			delete values.location;
-
-			const [city, state, country] = location.split(", ");
-
-			values.location = {
-				city,
-				state,
-				country,
-			};
-
-			setProfile(values)
-				.then(({ error, message }) => {
-					setLoading(false);
-					if (error) {
-						toast.error(message);
-						return;
-					}
-
-					handlePostVerification();
-				})
-				.catch((e) => {
-					console.error(e);
-					setLoading(false);
-				});
-		};
-
-		(type === 0
-			? handleOTP
-			: type === 1
-			? handleVerifyOTP
-			: handleProfileUpdate)();
-	};
-
-	const Form = [PhoneForm, OTPForm, RegisterForm][type];
-
-	return isMD ? (
-		<Dialog open={openAuth} onOpenChange={closeAuth}>
-			<DialogContent
-				className="px-0 py-8 sm:max-w-[425px]"
-				closable={type === 0 || closableAuth}
-			>
-				<Form
-					onSubmit={onSubmit}
-					loading={loading}
-					phoneNumber={phoneNumber}
-					editNumber={editNumber}
-				/>
-			</DialogContent>
-		</Dialog>
-	) : (
-		<Drawer open={openAuth} onOpenChange={closeAuth}>
-			<DrawerContent className="flex flex-col items-center gap-6 px-0 py-8">
-				<Form
-					onSubmit={onSubmit}
-					loading={loading}
-					phoneNumber={phoneNumber}
-					editNumber={editNumber}
-				/>
-			</DrawerContent>
-		</Drawer>
-	);
-};
-
-const PhoneForm = ({ onSubmit, loading, phoneNumber }) => {
-	const form = useForm({
-		resolver: zodResolver(numberSchema),
-		defaultValues: phoneNumber,
-	});
-
-	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex w-full flex-col gap-6 overflow-x-hidden"
-			>
-				<div className="flex flex-col gap-2">
-					<div className="flex flex-col gap-4 px-8">
-						<div className="relative aspect-[2.8/1] w-32">
-							<Image src="/logo.png" alt="12th Class" fill />
-						</div>
-						<div className="flex flex-col">
-							<div className="text-lg font-bold text-blue-600">
-								Login
-							</div>
-							<div className="text-sm text-slate-500">
-								Get unlimited resources for free
-							</div>
-						</div>
-					</div>
-				</div>
-				<div className="flex flex-col gap-4 px-8">
-					<div className="flex flex-col gap-1.5">
-						<Label>Enter mobile number</Label>
-						<FormField
-							control={form.control}
-							name="phoneNumber"
-							render={({ field }) => (
-								<FormItem className="flex-1">
-									<FormControl>
-										<Input
-											placeholder="9876543210"
-											type="number"
-											{...field}
-											className="focus-visible:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-					<Button
-						rounded
-						type="submit"
-						disabled={loading || !form.formState.isValid}
-					>
-						{loading ? "Loading..." : "Continue"}
-					</Button>
-					<div className="flex items-center justify-center gap-1 text-xs text-slate-500">
-						By continuing, you agree to our{" "}
-						<Link
-							href="/privacy"
-							className="underline decoration-dotted hover:decoration-solid"
-						>
-							Privacy policy
-						</Link>
-					</div>
-				</div>
-			</form>
-		</Form>
-	);
-};
-
-const OTPForm = ({ onSubmit, loading, phoneNumber, editNumber }) => {
-	const authId = useRemindYouStore((store) => store.authId);
-
-	const [resendAttempt, setResendAttempt] = useState(1);
-	const [resendIn, setResendIn] = useState(OTP_TIMER);
-	const resendIntervalRef =
-		(useRef < NodeJS.Timeout) | (undefined > undefined);
-	const resendTimerRef = (useRef < NodeJS.Timeout) | (undefined > undefined);
-
-	const form = useForm({
-		resolver: zodResolver(otpSchema),
-	});
-
-	const resetResendIn = (stop) => {
-		clearInterval(resendIntervalRef.current);
-		clearTimeout(resendTimerRef.current);
-		if (!stop) setResendIn(OTP_TIMER);
-		else setResendIn(0);
-	};
-
-	const handleResendIn = () => {
-		resetResendIn();
-		resendIntervalRef.current = setInterval(() => {
-			setResendIn((prev) => prev - 1000);
-		}, 1000);
-		resendTimerRef.current = setTimeout(() => {
-			resetResendIn(true);
-		}, OTP_TIMER);
-	};
-
-	const resendOTP =
-		(call = false) =>
-		() => {
-			toast.info(
-				OTP_ATTEMPTS[resendAttempt][call ? "callMessage" : "message"]
-			);
-			reSendOTP({
-				id: authId,
-				retryType: call ? "call" : "text",
-				...phoneNumber,
-			}).then(({ error, message }) => {
-				if (error) {
-					toast.error(message);
-					return;
-				}
-
-				setResendAttempt((prev) => prev + 1);
-				handleResendIn();
-			});
-		};
-
-	useEffect(() => {
-		handleResendIn();
-		return () => {
-			resetResendIn(true);
-			clearTimeout(resendTimerRef.current);
-			clearInterval(resendIntervalRef.current);
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex w-full flex-col gap-6 overflow-x-hidden"
-			>
-				<div className="flex flex-col gap-2">
-					<div className="flex flex-col gap-4 px-8">
-						<div className="relative aspect-[2.8/1] w-32">
-							<Image src="/logo.png" alt="12th Class" fill />
-						</div>
-						<div className="flex flex-col text-sm">
-							<span className="text-lg font-bold text-blue-600">
-								Verify
-							</span>
-							<span className="text-slate-500">
-								Enter the “4-digit OTP” to received via SMS on
-								the{" "}
-								<span className="inline-flex gap-1">
-									number{" "}
-									<span className="flex items-center justify-center gap-1 font-semibold">
-										{phoneNumber.phoneNumber}{" "}
-										<PencilIcon
-											className="h-3 w-3 cursor-pointer"
-											onClick={editNumber}
-										/>
-									</span>
-								</span>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div className="flex flex-col gap-4 px-8">
-					<FormField
-						control={form.control}
-						name="otp"
-						render={({ field }) => (
-							<FormItem>
-								<FormLabel>Enter OTP received</FormLabel>
-								<FormControl>
-									<InputOTP
-										maxLength={4}
-										{...field}
-										onComplete={form.handleSubmit(onSubmit)}
-									>
-										{Array.from({ length: 4 }, (_, i) => (
-											<InputOTPGroup key={i}>
-												<InputOTPSlot
-													className="size-12 text-base"
-													index={i}
-												/>
-											</InputOTPGroup>
-										))}
-									</InputOTP>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-					{resendAttempt < OTP_ATTEMPTS.length ? (
-						<div className="flex items-center justify-between text-xs">
-							<button
-								type="button"
-								disabled={!!resendIn}
-								className="cursor-pointer disabled:cursor-not-allowed"
-								onClick={resendOTP()}
-							>
-								Resend OTP{" "}
-								{resendIn ? (
-									<>
-										in{" "}
-										<span className="font-semibold">
-											{resendIn / 1000}s
-										</span>
-									</>
-								) : null}
-							</button>
-							{resendIn ? null : (
-								<button
-									type="button"
-									disabled={!!resendIn}
-									className="cursor-pointer disabled:cursor-not-allowed"
-									onClick={resendOTP(true)}
-								>
-									Retry via call
-								</button>
-							)}
-						</div>
-					) : null}
-					<Button
-						rounded
-						type="submit"
-						disabled={loading || !form.formState.isValid}
-					>
-						{loading ? "Loading..." : "Verify"}
-					</Button>
-				</div>
-			</form>
-		</Form>
-	);
-};
-
-const RegisterForm = ({ onSubmit, loading }) => {
-	const form = useForm({
-		resolver: zodResolver(registerSchema),
-		defaultValues: async () => {
-			if (!process.env.NEXT_PUBLIC_IPDATA_API_KEY) return {};
-
-			const ipdata = new IPData(process.env.NEXT_PUBLIC_IPDATA_API_KEY);
-			const ipInfo = await ipdata.lookup();
-
-			return {
-				name: undefined,
-				email: undefined,
-				location: [ipInfo.city, ipInfo.region, ipInfo.country_code]
-					.filter(Boolean)
-					.join(", "),
-			};
-		},
-	});
-
-	return (
-		<Form {...form}>
-			<form
-				onSubmit={form.handleSubmit(onSubmit)}
-				className="flex w-full flex-col gap-6 overflow-x-hidden"
-			>
-				<div className="flex flex-col gap-2">
-					<div className="flex flex-col gap-4 px-8">
-						<div className="relative aspect-[2.8/1] w-32">
-							<Image src="/logo.png" alt="12th Class" fill />
-						</div>
-						<div className="flex flex-col">
-							<div className="text-lg font-semibold text-blue-600">
-								Last Step
-							</div>
-							<div className="text-sm text-slate-500">
-								Complete your account creation on 12thClass by
-								helping us with your details
-							</div>
-						</div>
-					</div>
-				</div>
-				<div className="flex flex-col gap-4 px-8">
+		<>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 py-4">
 					<FormField
 						control={form.control}
 						name="name"
@@ -686,7 +154,11 @@ const RegisterForm = ({ onSubmit, loading }) => {
 							<FormItem>
 								<FormLabel>Name</FormLabel>
 								<FormControl>
-									<Input placeholder="John Doe" {...field} />
+									<Input
+										placeholder="Enter Your Name"
+										{...field}
+										value={field.value || ""}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -700,66 +172,190 @@ const RegisterForm = ({ onSubmit, loading }) => {
 								<FormLabel>Email</FormLabel>
 								<FormControl>
 									<Input
-										placeholder="john@example.com"
-										type="email"
+										placeholder="Enter Your Email"
 										{...field}
+										value={field.value || ""}
+
 									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
 						)}
 					/>
-					<Autocomplete
-						form={form}
-						name="location"
-						label="Enter your city"
-						placeholder="Search by city name"
-						apiBased
-						asDefault
-						searchKey="title"
-						instance="location"
-						onSelect={(values, option) => {
-							form.setValue("location", option.title);
-						}}
+					<FormField
+						control={form.control}
+						name="mobile"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Mobile</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="Enter Your Mobile"
+										{...field}
+										value={field.value || ""}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Password</FormLabel>
+								<FormControl>
+									<Input
+										type="password"
+										placeholder="Enter Your Password"
+										{...field}
+										value={field.value || ""}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
 					/>
 					<Button
-						rounded
 						type="submit"
-						disabled={loading || !form.formState.isValid}
+						disabled={loading}
+						className={"w-full"}
 					>
-						{loading ? "Loading..." : "Done"}
+						{loading ? <Loading /> : "Sign Up"}
 					</Button>
-				</div>
-			</form>
-		</Form>
-	);
-};
+				</form>
+			</Form>
 
-const OTP_TIMER = 1000 * 60 * 0.5;
-const OTP_ATTEMPTS = [
-	{ step: "send", message: "OTP sent successfully over SMS." },
-	{
-		step: "resend1",
-		message: "OTP resent. Please check your messages.",
-		callMessage: "OTP resent via call. Stay tuned for the call..",
-	},
-	{
-		step: "resend2",
-		message: "OTP resent again. Kindly check your messages.",
-		callMessage: "OTP resent again via call. Stay tuned for the call.",
-	},
-];
+		</>
+	)
+}
 
-const numberSchema = z.object({
-	phoneNumber: z.string().length(10, {
-		message: "Invalid phone number",
-	}),
-});
-const otpSchema = z.object({
-	otp: z.string(),
-});
-const registerSchema = z.object({
-	name: z.string(),
-	email: z.string().email(),
-	location: z.string(),
-});
+const LogInForm = ({ setOpen }) => {
+
+	const [loading, setLoading] = useState(false)
+	const dispatch = useRemindYouStore((state) => state.dispatch)
+
+	const form = useForm({
+		resolver: zodResolver(LoginSchema),
+	})
+
+	const onSubmit = async (values) => {
+		setLoading(true)
+
+		await logIn(values)
+			.then(result => {
+				setLoading(false)
+				setOpen(false)
+				form.reset()
+				toast.success(result.data.message)
+				dispatch({
+					type: "SET_STATE",
+					payload: {
+						isAuthenticated: true,
+						openAuth: false,
+					}
+				})
+				console.log(result.data.token);
+
+				cookieService.setTokens({
+					accessToken: result.data.token
+				})
+			})
+			.catch(err => {
+				setLoading(false)
+				setOpen(true)
+				toast.err(err.data.error)
+			})
+	}
+
+	return (
+		<>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 py-4">
+					<FormField
+						control={form.control}
+						name="mobile"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Mobile</FormLabel>
+								<FormControl>
+									<Input
+										type="number"
+										placeholder="Enter Your Mobile"
+										{...field}
+										value={field.value || ""}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel>Password</FormLabel>
+								<FormControl>
+									<Input
+										type="password"
+										placeholder="Enter Your Password"
+										{...field}
+										value={field.value || ""}
+									/>
+								</FormControl>
+								<FormMessage />
+							</FormItem>
+						)}
+					/>
+					<Button
+						type="submit"
+						disabled={loading}
+						className={"w-full"}
+					>
+						{loading ? <Loading /> : "Log In"}
+					</Button>
+				</form>
+			</Form>
+
+		</>
+	)
+}
+
+
+const SignupSchema = z.object({
+	name: z
+		.string()
+		.min(2, { message: "Name is required" })
+		.regex(/^[a-zA-Z ]+$/, "Only letters and spaces are allowed.")
+		.trim(),
+	email: z
+		.string()
+		.email({ message: "Invalid email address" })
+		.trim(),
+	mobile: z
+		.string()
+		.min(10, { message: "Mobile number is required" })
+		.max(10, { message: "Mobile number is too long" })
+		.regex(/^[0-9]+$/, "Only numbers are allowed.")
+		.trim(),
+	password: z
+		.string()
+		.min(6, { message: "Password is required" })
+		.trim(),
+})
+
+const LoginSchema = z.object({
+	mobile: z
+		.string()
+		.min(10, { message: "Mobile number is required" })
+		.max(10, { message: "Mobile number is too long" })
+		.regex(/^[0-9]+$/, "Only numbers are allowed.")
+		.trim(),
+	password: z
+		.string()
+		.min(6, { message: "Password is required" })
+		.trim(),
+})

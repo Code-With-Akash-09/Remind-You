@@ -1,13 +1,14 @@
 "use server";
 
 import {
-	fetchClientWithToken,
 	fetchClientWithoutToken,
+	fetchClientWithToken,
 } from "@/services/fetch";
 import { cookies } from "next/headers";
 
-export const sendOTP = async (body) => {
-	const resp = await fetchClientWithoutToken("/v3/auth/tc/send", {
+
+export const signUp = async (body) => {
+	const resp = await fetchClientWithoutToken("/v1/auth/signup", {
 		method: "POST",
 		body,
 	});
@@ -15,35 +16,17 @@ export const sendOTP = async (body) => {
 	return resp;
 };
 
-export const reSendOTP = async (body) => {
-	const resp = await fetchClientWithoutToken("/v3/auth/tc/resend", {
+export const logIn = async (body) => {
+	const resp = await fetchClientWithoutToken("/v1/auth/login", {
 		method: "POST",
 		body,
 	});
-
-	return resp;
-};
-
-export const verifyOTP = async (body) => {
-	const resp = await fetchClientWithoutToken("/v3/auth/tc/verify", {
-		method: "POST",
-		body,
-	});
-
-	if (resp.error) return resp;
-
-	const token = resp.data?.token;
-
-	if (token) {
-		const cookieStore = await cookies();
-		cookieStore.set(`${process.env.NEXT_PUBLIC_COOKIE_KEY}_access`, token);
-	}
 
 	return resp;
 };
 
 export const getProfile = async (fallbackToken) => {
-	const resp = await fetchClientWithToken("/v3/tc/profile", {
+	const resp = await fetchClientWithToken("/v1/user/profile", {
 		method: "GET",
 		fallbackToken,
 	});
@@ -67,11 +50,3 @@ export const logout = async () => {
 	cookieStore.delete(`${process.env.NEXT_PUBLIC_COOKIE_KEY}_access`);
 };
 
-export const searchCity = async (data) => {
-	const query = new URLSearchParams(data).toString();
-	const resp = await fetchClientWithToken(`/v3/user/cities?${query}`, {
-		method: "GET",
-	});
-
-	return resp;
-};

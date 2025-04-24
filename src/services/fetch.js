@@ -64,9 +64,12 @@ const getToken = async (tokenType) => {
 export const customFetch = async (
 	baseUrl,
 	endpoint,
-	options = DEFAULT_OPTIONS,
+	options = {},
 	tokenType = "access"
 ) => {
+	// Merge user options with default options to ensure all required properties exist
+	options = { ...DEFAULT_OPTIONS, ...options };
+
 	let uid, token, errMsg, responseData;
 
 	const fallbackToken = options?.fallbackToken;
@@ -132,7 +135,7 @@ export const customFetch = async (
 			const accessToken = fallbackToken ?? (await getToken("access"));
 			if (accessToken) {
 				const decodedAccessToken = jwtDecode(accessToken);
-				uid = decodedAccessToken.uid; // Store user ID for error logging
+				uid = decodedAccessToken.id; // Store user ID for error logging
 			}
 		}
 
@@ -260,7 +263,7 @@ export const customFetch = async (
 				return {
 					error: false,
 					message: retryResData.message ?? "",
-					data: retryResData.results ?? retryResData,
+					data: retryResData.results?.data ?? retryResData.results ?? retryResData,
 				};
 			} else {
 				apiDetails.errMsg = "Failed after retrying with new token";
@@ -282,7 +285,7 @@ export const customFetch = async (
 			error: false,
 			message: responseData.message ?? "",
 			data:
-				responseData.results.data ??
+				responseData.results?.data ??
 				responseData.results ??
 				responseData,
 		};

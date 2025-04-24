@@ -4,7 +4,6 @@ import { reducer } from "./reducer"
 
 export const initialState = {
 	user: null,
-	authId: null,
 	openAuth: false,
 	closableAuth: true,
 	isAuthenticated: false,
