@@ -1,8 +1,35 @@
+import RecentActivity from "@/molecules/RecentActivity"
+import TodayTaskList from "@/molecules/TodayTaskList"
+import TodoChart from "@/molecules/TodoChart"
 
 const Dashboard = () => {
 	return (
 		<>
-			<div className="flex size-full">
+			<div className="flex h-full w-full">
+				<div className="grid grid-cols-4 h-full w-full gap-4">
+					<div className="flex flex-col w-full h-full gap-4 col-span-3">
+						<div className="flex flex-col w-full h-fit border p-4 gap-2 md:gap-4 rounded-md">
+							<span className="text-lg md:text-xl lg:text-2xl font-medium">
+								Welcome 👋
+							</span>
+							<p className="text-sm md:text-base">
+								We’re glad to see you back! Ready to tackle your tasks and crush your goals? Stay focused, stay productive — we’re here to help you organize your day, one task at a time. Let’s get things done!
+							</p>
+						</div>
+						<div className="flex flex-col w-full h-fit border p-4 gap-2 md:gap-4 rounded-md">
+							<span className="text-sm font-medium">Progress Chart</span>
+							<TodoChart />
+						</div>
+						<div className="flex flex-col w-full flex-grow border p-4 gap-2 md:gap-4 rounded-md">
+							<span className="text-sm font-medium">Recent Activities</span>
+							<RecentActivity />
+						</div>
+					</div>
+					<div className="flex flex-col w-full h-full border p-4 gap-4 rounded-md">
+						<span className="text-sm font-medium">Todays Tasks</span>
+						<TodayTaskList />
+					</div>
+				</div>
 			</div>
 		</>
 	)

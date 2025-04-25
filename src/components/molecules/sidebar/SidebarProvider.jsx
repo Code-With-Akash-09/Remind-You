@@ -3,13 +3,19 @@
 import Logo from "@/atoms/logo"
 import { Button } from "@/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
-import { FolderPlusIcon, HomeIcon, ListTodo, MenuIcon, SettingsIcon } from "lucide-react"
+import { FilePlusIcon, FolderPlusIcon, HomeIcon, ListTodo, MenuIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { useState } from "react"
 
 const SidebarProvider = ({ children }) => {
 
+    const pathname = usePathname()
     const [isToggle, setIsToggle] = useState(true)
+
+    const getSectionTitle = (pathname) => {
+        return NavList.find(item => item.url === pathname)?.name || ""
+    }
 
     const toggleSidebar = () => {
         setIsToggle(prev => !prev)
@@ -50,7 +56,7 @@ const SidebarProvider = ({ children }) => {
             <div className="flex flex-col flex-grow">
                 <div className="flex w-full justify-between p-2 md:p-4 border-b border-neutral-200">
                     <div className="flex w-fit items-center font-bold text-2xl">
-                        Hey
+                        {getSectionTitle(pathname)}
                     </div>
                     <div className="flex w-fit gap-4">
                         <Button>
@@ -60,12 +66,14 @@ const SidebarProvider = ({ children }) => {
                         <Button
                             variant={"outline"}
                         >
-                            <FolderPlusIcon />
+                            <FilePlusIcon />
                             Create Todo
                         </Button>
                     </div>
                 </div>
-                {children}
+                <div className="flex flex-1 w-full p-2 md:p-4">
+                    {children}
+                </div>
             </div>
         </div>
     )
