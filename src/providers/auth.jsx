@@ -24,6 +24,8 @@ const AuthProvider = ({ children }) => {
 	const isAuthenticated = useRemindYouStore(state => state.isAuthenticated)
 	const dispatch = useRemindYouStore((state) => state.dispatch)
 
+	const token = cookieService.getToken("access")
+
 	const getUserProfile = async (token) => {
 		const { data = null } = await getProfile(token)
 
@@ -36,7 +38,7 @@ const AuthProvider = ({ children }) => {
 					openAuth: false,
 				}
 			})
-			setOpen(true)
+			setOpen(false)
 		} else {
 			dispatch({
 				type: "SET_STATE",
@@ -49,26 +51,24 @@ const AuthProvider = ({ children }) => {
 			setOpen(true)
 		}
 		setLoading(false)
-
 	}
 
 	useEffect(() => {
 		setLoading(true)
-		const token = cookieService.getToken("access")
 		if (token) getUserProfile(token)
-	}, [isAuthenticated])
+	}, [isAuthenticated, token])
 
 	if (loading) return (
-		<div className="flex w-full items-center justify-center  h-full">
+		<div className="flex w-full items-center justify-center h-full">
 			<Loading />
 		</div>
 	)
 
 	return (
 		<>
-			<div className="flex w-full h-full">
+			<div className="flex flex-1 w-full h-full">
 				{
-					isAuthenticated ? (
+					!isAuthenticated ? (
 						<Dialog open={open} onOpenChange={() => setOpen(false)}>
 							<DialogContent className="!max-w-sm dark:!border-neutral-700">
 								<DialogHeader>
