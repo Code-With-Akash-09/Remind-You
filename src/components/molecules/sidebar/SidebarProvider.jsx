@@ -3,15 +3,17 @@
 import Logo from "@/atoms/logo"
 import { Button } from "@/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
-import { FilePlusIcon, FolderPlusIcon, HomeIcon, ListTodo, MenuIcon, SettingsIcon } from "lucide-react"
+import { FilePlusIcon, HomeIcon, ListTodo, MenuIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
+import CreateFolderForm from "../CreateFolderForm"
 
 const SidebarProvider = ({ children }) => {
 
     const pathname = usePathname()
     const [isToggle, setIsToggle] = useState(true)
+    const { parentId } = useParams()
 
     const getSectionTitle = (pathname) => {
         return NavList.find(item => item.url === pathname)?.name || ""
@@ -59,10 +61,7 @@ const SidebarProvider = ({ children }) => {
                         {getSectionTitle(pathname)}
                     </div>
                     <div className="flex w-fit gap-4">
-                        <Button>
-                            <FolderPlusIcon />
-                            Create Folder
-                        </Button>
+                        <CreateFolderForm parentId={parentId} />
                         <Button
                             variant={"outline"}
                         >

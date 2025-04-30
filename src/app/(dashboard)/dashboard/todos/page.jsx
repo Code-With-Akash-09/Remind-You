@@ -13,7 +13,11 @@ const Todos = () => {
 
     const getTodos = async () => {
         setLoading(true)
-        const { data = [] } = await getAllTodos("root")
+        const { data = [] } = await getAllTodos({
+            parentId: "root",
+            page: 1,
+            limit: 12,
+        })
         if (data) setTodos(data.result)
         setLoading(false)
     }
