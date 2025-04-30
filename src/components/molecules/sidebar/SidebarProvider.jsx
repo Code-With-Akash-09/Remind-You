@@ -1,5 +1,6 @@
 "use client"
 
+import BackBtn from "@/atoms/BackBtn"
 import Logo from "@/atoms/logo"
 import { Button } from "@/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
@@ -13,7 +14,7 @@ const SidebarProvider = ({ children }) => {
 
     const pathname = usePathname()
     const [isToggle, setIsToggle] = useState(true)
-    const { parentId } = useParams()
+    const { todoId } = useParams()
 
     const getSectionTitle = (pathname) => {
         return NavList.find(item => item.url === pathname)?.name || ""
@@ -57,11 +58,12 @@ const SidebarProvider = ({ children }) => {
             </motion.div>
             <div className="flex flex-col flex-grow">
                 <div className="flex w-full justify-between p-2 md:p-4 border-b border-neutral-200">
-                    <div className="flex w-fit items-center font-bold text-2xl">
+                    <div className="flex w-fit gap-4 items-center font-bold text-2xl">
+                        {todoId && <BackBtn />}
                         {getSectionTitle(pathname)}
                     </div>
                     <div className="flex w-fit gap-4">
-                        <CreateFolderForm parentId={parentId} />
+                        <CreateFolderForm parentId={todoId ?? null} />
                         <Button
                             variant={"outline"}
                         >

@@ -5,10 +5,12 @@ import Loading from "@/atoms/loading"
 import TodoCard from "@/molecules/TodoCard"
 import useRemindYouStore from "@/store"
 import Image from "next/image"
+import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 
-const Todos = () => {
+const TodoId = () => {
 
+    const { todoId } = useParams()
     const [todos, setTodos] = useState([])
     const [loading, setLoading] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
@@ -17,10 +19,11 @@ const Todos = () => {
     const getTodos = async () => {
         setLoading(true)
         const { data = [] } = await getAllTodos({
-            parentId: "root",
+            parentId: todoId,
             page: 1,
             limit: 100,
         })
+
         if (data) {
             setTodos(data.result)
             dispatch({
@@ -80,4 +83,4 @@ const Todos = () => {
     )
 }
 
-export default Todos
+export default TodoId

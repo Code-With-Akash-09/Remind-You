@@ -2,13 +2,13 @@
 
 import { createTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
+import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
 import { Input } from "@/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FolderPlusIcon } from "lucide-react"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -18,7 +18,7 @@ const CreateFolderForm = ({ parentId }) => {
 
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
-    const router = useRouter()
+    const dispatch = useRemindYouStore((state) => state.dispatch)
 
     const form = useForm({
         resolver: zodResolver(FolderSchema),
@@ -37,7 +37,12 @@ const CreateFolderForm = ({ parentId }) => {
 
         if (data) {
             form.reset()
-            router.push("/dashboard")
+            dispatch({
+                type: "SET_STATE",
+                payload: {
+                    todoCreated: true,
+                }
+            })
             setOpen(false)
             setLoading(false)
             toast.success("Folder Created Successfully")
@@ -113,6 +118,6 @@ export default CreateFolderForm
 const FolderSchema = z.object({
     label: z.string()
         .min(2, { message: "Folder Name is required" })
-        .regex(/^[a-zA-Z ]+$/, "Only letters and spaces are allowed.")
+        .regex(/^[a-zA-Z0-9 ]+$/, "Only letters, digits, and spaces are allowed.")
         .trim(),
 })

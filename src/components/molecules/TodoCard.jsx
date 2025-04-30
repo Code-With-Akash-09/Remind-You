@@ -1,4 +1,5 @@
 import { format } from "date-fns"
+import Link from "next/link"
 
 const TodoCard = ({ todo }) => {
     return (
@@ -19,7 +20,7 @@ export default TodoCard
 
 const FolderCard = ({ todo }) => {
     return (
-        <div className="flex flex-col aspect-video w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] bg-cover bg-center hover:shadow-md hover:border-amber-400 transition-all">
+        <Link href={`/dashboard/todos/${todo.todoId}?parentId=${todo.parentId}`} className="flex flex-col aspect-video w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] bg-cover bg-center hover:shadow-md border-amber-400 transition-all">
             <div className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
                 <div className="flex w-full">
                     <span className="font-bold text-lg text-neutral-800">
@@ -40,13 +41,13 @@ const FolderCard = ({ todo }) => {
                     {format(todo.createdAt, "Pp")}
                 </span>
             </div>
-        </div>
+        </Link>
     )
 }
 
 const FileCard = ({ todo }) => {
     return (
-        <div className="flex flex-col aspect-video w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] bg-cover bg-center hover:shadow-md hover:border-blue-400 transition-all">
+        <div className="flex flex-col aspect-video w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] bg-cover bg-center hover:shadow-md border-blue-400 transition-all">
             <div className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
                 <div className="flex w-full">
                     <span className="font-bold text-lg text-neutral-800">
