@@ -55,8 +55,8 @@ const Todos = () => {
                                             />
                                         </div>
                                         <div className="flex w-full items-center justify-center">
-                                            <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl text-neutral-800 font-bold">
-                                                You have no todos
+                                            <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl text-neutral-700 font-bold">
+                                                You have Empty Todos
                                             </span>
                                         </div>
                                     </>

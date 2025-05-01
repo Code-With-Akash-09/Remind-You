@@ -29,10 +29,10 @@ const FolderCard = ({ todo }) => {
                 </div>
                 <div className="flex flex-col gap-1 w-full">
                     <span className="text-sm text-neutral-800">
-                        <b>Folder:</b> 12
+                        <b>Folder:</b> {todo.count?.folder}
                     </span>
                     <span className="text-sm text-neutral-800">
-                        <b>File:</b> 12
+                        <b>File:</b> {todo.count?.file}
                     </span>
                 </div>
             </div>

@@ -4,10 +4,11 @@ import BackBtn from "@/atoms/BackBtn"
 import Logo from "@/atoms/logo"
 import { Button } from "@/ui/button"
 import { AnimatePresence, motion } from "framer-motion"
-import { FilePlusIcon, HomeIcon, ListTodo, MenuIcon, SettingsIcon } from "lucide-react"
+import { HomeIcon, ListTodo, MenuIcon, SettingsIcon } from "lucide-react"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
+import CreateFileForm from "../CreateFileForm"
 import CreateFolderForm from "../CreateFolderForm"
 
 const SidebarProvider = ({ children }) => {
@@ -64,12 +65,7 @@ const SidebarProvider = ({ children }) => {
                     </div>
                     <div className="flex w-fit gap-4">
                         <CreateFolderForm parentId={todoId ?? null} />
-                        <Button
-                            variant={"outline"}
-                        >
-                            <FilePlusIcon />
-                            Create Todo
-                        </Button>
+                        <CreateFileForm parentId={todoId ?? null} />
                     </div>
                 </div>
                 <div className="flex flex-1 w-full p-2 md:p-4">
