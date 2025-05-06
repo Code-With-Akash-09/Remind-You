@@ -1,5 +1,7 @@
+import { Button } from "@/ui/button"
 import { format } from "date-fns"
-import Link from "next/link"
+import { EditIcon, Trash2 } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const TodoCard = ({ todo }) => {
     return (
@@ -19,8 +21,22 @@ export default TodoCard
 
 
 const FolderCard = ({ todo }) => {
+
+    const router = useRouter()
+
+    const handleEdit = (e, todo) => {
+        e.stopPropagation()
+        console.log(todo);
+    }
+
     return (
-        <Link href={`/dashboard/todos/${todo.todoId}?parentId=${todo.parentId}`} className="flex flex-col aspect-video w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] bg-cover bg-center hover:shadow-md border-amber-400 transition-all">
+        <div
+            onClick={() =>
+                router.push(
+                    `/dashboard/todos/${todo.todoId}?parentId=${todo.parentId}`
+                )
+            }
+            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 transition-all">
             <div className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
                 <div className="flex w-full">
                     <span className="font-bold text-lg text-neutral-800">
@@ -41,7 +57,23 @@ const FolderCard = ({ todo }) => {
                     {format(todo.createdAt, "Pp")}
                 </span>
             </div>
-        </Link>
+            <div className="flex absolute right-0 top-0 gap-2 h-full w-full items-start justify-end opacity-0 group-hover:opacity-100 -translate-y-full group-hover:translate-y-0 ease-in-out transition-all">
+                <Button
+                    variant={"outline"}
+                    size={"icon"}
+                    onClick={e => handleEdit(e, todo)}
+                >
+                    <EditIcon />
+                </Button>
+                <Button
+                    variant={"outline"}
+                    size={"icon"}
+                    onClick={e => handleEdit(e, todo)}
+                >
+                    <Trash2 />
+                </Button>
+            </div>
+        </div>
     )
 }
 
