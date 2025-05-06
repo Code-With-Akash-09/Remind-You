@@ -60,6 +60,7 @@ const FolderCard = ({ todo }) => {
                 />
                 <DeleteTodo
                     todoId={todo.todoId}
+                    type="folder"
                 />
             </div>
         </div>
@@ -67,9 +68,18 @@ const FolderCard = ({ todo }) => {
 }
 
 const FileCard = ({ todo }) => {
+
+    const router = useRouter()
+
     return (
-        <div className="flex flex-col aspect-video w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] bg-cover bg-center hover:shadow-md border-blue-400 transition-all">
-            <div className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
+        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 transition-all">
+            <div
+                onClick={() =>
+                    router.push(
+                        `/dashboard/todo/${todo.todoId}`
+                    )
+                }
+                className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
                 <div className="flex w-full">
                     <span className="font-bold text-lg text-neutral-800">
                         {todo.label}
@@ -86,6 +96,12 @@ const FileCard = ({ todo }) => {
                 <span className="text-[10px] text-neutral-500">
                     {format(todo.createdAt, "Pp")}
                 </span>
+            </div>
+            <div className="flex absolute z-10 right-2 top-2 gap-2 h-fit w-fit items-start justify-end opacity-0 group-hover:opacity-100  ease-in-out transition-all">
+                <DeleteTodo
+                    todoId={todo.todoId}
+                    type="file"
+                />
             </div>
         </div>
     )

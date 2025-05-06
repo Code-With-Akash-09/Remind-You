@@ -10,7 +10,7 @@ import { TooltipTrigger } from "@radix-ui/react-tooltip"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 
-const DeleteTodo = ({ todoId }) => {
+const DeleteTodo = ({ todoId, type }) => {
 
     const [open, setOpen] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
@@ -62,7 +62,7 @@ const DeleteTodo = ({ todoId }) => {
                     <DialogHeader>
                         <DialogTitle>Confirm Deletion</DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to delete this todo?
+                            Are you sure you want to delete this todo {type}?
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter className="sm:justify-between">
