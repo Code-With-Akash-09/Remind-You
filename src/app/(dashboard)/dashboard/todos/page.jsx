@@ -42,7 +42,7 @@ const Todos = () => {
     return (
         <div className="size-full flex">
             {
-                todos.length <= 0 ? (
+                todos?.length <= 0 ? (
                     <div className="size-full flex items-center bg-gradient-to-r from-blue-50 to-amber-50 justify-center rounded-md">
                         <div className="flex flex-col gap-4 w-full max-w-sm items-center justify-center">
                             {

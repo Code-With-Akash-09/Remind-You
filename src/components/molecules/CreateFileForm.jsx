@@ -71,7 +71,9 @@ const CreateFileForm = ({ parentId }) => {
                 onClick={() => setOpen(true)}
             >
                 <FilePlusIcon />
-                Create File
+                <span className="hidden md:flex">
+                    Create File
+                </span>
             </Button>
             <Sheet open={open} onOpenChange={() => setOpen(false)}>
                 <SheetContent className={"sm:max-w-2xl"}>

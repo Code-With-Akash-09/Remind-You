@@ -32,10 +32,10 @@ const SidebarProvider = ({ children }) => {
     return (
         <div className="size-full flex divide-x">
             <motion.div
-                animate={{ width: isToggle ? 288 : 78 }}
+                animate={{ width: isToggle ? 288 : 70 }}
                 initial={{ width: 288 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className={`flex p-2 md:p-4`}
+                className={`flex p-3`}
             >
                 <div className="flex flex-col gap-4 w-full">
                     <div className="flex gap-4 w-full">

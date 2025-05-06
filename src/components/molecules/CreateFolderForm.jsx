@@ -89,7 +89,9 @@ const CreateFolderForm = ({ parentId, initialData = null }) => {
                         onClick={() => setOpen(true)}
                     >
                         <FolderPlusIcon />
-                        Create Folders
+                        <span className="hidden md:flex">
+                            Create Folders
+                        </span>
                     </Button>
                 )
             }
