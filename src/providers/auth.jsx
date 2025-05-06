@@ -23,6 +23,7 @@ const AuthProvider = ({ children }) => {
 	const [open, setOpen] = useState(false)
 	const isAuthenticated = useRemindYouStore(state => state.isAuthenticated)
 	const dispatch = useRemindYouStore((state) => state.dispatch)
+	const openAuth = useRemindYouStore((state) => state.openAuth)
 
 	const token = cookieService.getToken("access")
 
@@ -84,7 +85,7 @@ const AuthProvider = ({ children }) => {
 			<div className="flex flex-1 w-full h-full">
 				{
 					!isAuthenticated ? (
-						<Dialog open={open} onOpenChange={() => setOpen(!openAuth)}>
+						<Dialog open={open} onOpenChange={() => setOpen(openAuth)}>
 							<DialogContent className="!max-w-sm dark:!border-neutral-700">
 								<DialogHeader>
 									<DialogTitle className="items-center justify-center flex">

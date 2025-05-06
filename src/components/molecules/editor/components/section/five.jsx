@@ -2,8 +2,7 @@ import {
 	CaretDownIcon,
 	CodeIcon,
 	DividerHorizontalIcon,
-	PlusIcon,
-	QuoteIcon,
+	PlusIcon
 } from "@radix-ui/react-icons"
 import LinkEditPopover from "../link/linkEditPopover"
 import ToolbarSection from "../toolbarSection"
@@ -19,16 +18,16 @@ const formatActions = [
 			editor.can().chain().focus().toggleCodeBlock().run(),
 		shortcuts: ["mod", "alt", "C"],
 	},
-	{
-		value: "blockquote",
-		label: "Blockquote",
-		icon: <QuoteIcon className="size-5" />,
-		action: editor => editor.chain().focus().toggleBlockquote().run(),
-		isActive: editor => editor.isActive("blockquote"),
-		canExecute: editor =>
-			editor.can().chain().focus().toggleBlockquote().run(),
-		shortcuts: ["mod", "shift", "B"],
-	},
+	// {
+	// 	value: "blockquote",
+	// 	label: "Blockquote",
+	// 	icon: <QuoteIcon className="size-5" />,
+	// 	action: editor => editor.chain().focus().toggleBlockquote().run(),
+	// 	isActive: editor => editor.isActive("blockquote"),
+	// 	canExecute: editor =>
+	// 		editor.can().chain().focus().toggleBlockquote().run(),
+	// 	shortcuts: ["mod", "shift", "B"],
+	// },
 	{
 		value: "horizontalRule",
 		label: "Divider",

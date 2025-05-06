@@ -15,7 +15,7 @@ const HomeNavbar = () => {
                     <Button
                         asChild
                     >
-                        <Link href={"/auth"}>
+                        <Link href={"/dashboard"}>
                             Get Started
                         </Link>
                     </Button>
