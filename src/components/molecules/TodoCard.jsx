@@ -52,7 +52,7 @@ const FolderCard = ({ todo }) => {
                     {format(todo.createdAt, "Pp")}
                 </span>
             </div>
-            <div className="flex absolute z-10 right-0 top-0 gap-2 h-fit w-fit items-start justify-end opacity-0 group-hover:opacity-100 -translate-y-full group-hover:translate-y-0 ease-in-out transition-all">
+            <div className="flex absolute z-10 right-2 top-2 gap-2 h-fit w-fit items-start justify-end opacity-0 group-hover:opacity-100 -translate-y-full group-hover:translate-y-0 ease-in-out transition-all">
                 <CreateFolderForm
                     parentId={todo.parentId}
                     initialData={todo}

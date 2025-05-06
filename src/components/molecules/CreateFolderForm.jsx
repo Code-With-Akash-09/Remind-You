@@ -7,6 +7,7 @@ import { Button } from "@/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
 import { Input } from "@/ui/input"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { EditIcon, FolderPlusIcon } from "lucide-react"
 import { useState } from "react"
@@ -67,13 +68,22 @@ const CreateFolderForm = ({ parentId, initialData = null }) => {
         <>
             {
                 initialData ? (
-                    <Button
-                        variant={"outline"}
-                        size={"icon"}
-                        onClick={(e) => handleEdit(e)}
-                    >
-                        <EditIcon />
-                    </Button>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant={"outline"}
+                                    size={"icon"}
+                                    onClick={(e) => handleEdit(e)}
+                                >
+                                    <EditIcon />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent className="w-fit">
+                                Edit
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 ) : (
                     <Button
                         onClick={() => setOpen(true)}
@@ -124,7 +134,13 @@ const CreateFolderForm = ({ parentId, initialData = null }) => {
                                         disabled={loading}
                                         className={"w-full"}
                                     >
-                                        {loading ? <Loading /> : "Create"}
+                                        {
+                                            loading ? (
+                                                <Loading />
+                                            ) : (
+                                                initialData ? "Update" : "Create"
+                                            )
+                                        }
                                     </Button>
                                 </div>
                             </form>
