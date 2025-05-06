@@ -15,6 +15,7 @@ const TodoId = () => {
     const [loading, setLoading] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
     const todoCreated = useRemindYouStore((state) => state.todoCreated)
+    const todoDeleted = useRemindYouStore((state) => state.todoDeleted)
 
     const getTodos = async () => {
         setLoading(true)
@@ -30,6 +31,7 @@ const TodoId = () => {
                 type: "SET_STATE",
                 payload: {
                     todoCreated: false,
+                    todoDeleted: false,
                 }
             })
         }
@@ -38,7 +40,7 @@ const TodoId = () => {
 
     useEffect(() => {
         getTodos()
-    }, [todoCreated])
+    }, [todoCreated, todoDeleted])
 
     return (
         <div className="size-full flex">

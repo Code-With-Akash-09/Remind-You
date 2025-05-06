@@ -35,3 +35,13 @@ export const getTodoById = async (todoId) => {
 
     return resp;
 }
+
+export const deleteTodo = async (todoId) => {
+    console.log(todoId);
+
+    const resp = await fetchClientWithToken(`/v1/todos/delete/${todoId}`, {
+        method: "DELETE",
+    });
+
+    return resp;
+}

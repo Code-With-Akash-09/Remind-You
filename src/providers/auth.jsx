@@ -136,8 +136,6 @@ const SignUpForm = ({ setOpen }) => {
 		await signUp(values)
 			.then(result => {
 
-				console.log(result);
-
 				const { data: { code, message, error, token } = null } = result
 
 				if (error) {

@@ -1,6 +1,7 @@
 import { format } from "date-fns"
 import { useRouter } from "next/navigation"
 import CreateFolderForm from "./CreateFolderForm"
+import DeleteTodo from "./DeleteTodo"
 
 const TodoCard = ({ todo }) => {
     return (
@@ -52,10 +53,13 @@ const FolderCard = ({ todo }) => {
                     {format(todo.createdAt, "Pp")}
                 </span>
             </div>
-            <div className="flex absolute z-10 right-2 top-2 gap-2 h-fit w-fit items-start justify-end opacity-0 group-hover:opacity-100 -translate-y-full group-hover:translate-y-0 ease-in-out transition-all">
+            <div className="flex absolute z-10 right-2 top-2 gap-2 h-fit w-fit items-start justify-end opacity-0 group-hover:opacity-100  ease-in-out transition-all">
                 <CreateFolderForm
                     parentId={todo.parentId}
                     initialData={todo}
+                />
+                <DeleteTodo
+                    todoId={todo.todoId}
                 />
             </div>
         </div>

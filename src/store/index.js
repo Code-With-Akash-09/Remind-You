@@ -8,6 +8,7 @@ export const initialState = {
 	closableAuth: true,
 	isAuthenticated: false,
 	todoCreated: false,
+	todoDeleted: false,
 	queryParams: {},
 }
 
