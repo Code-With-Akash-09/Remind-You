@@ -1,6 +1,6 @@
 "use client"
 
-import { createTodo } from "@/actions/todo"
+import { createTodo, updateTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
@@ -8,13 +8,13 @@ import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
 import { Input } from "@/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FolderPlusIcon } from "lucide-react"
+import { EditIcon, FolderPlusIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
-const CreateFolderForm = ({ parentId }) => {
+const CreateFolderForm = ({ parentId, initialData = null }) => {
 
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
@@ -22,18 +22,28 @@ const CreateFolderForm = ({ parentId }) => {
 
     const form = useForm({
         resolver: zodResolver(FolderSchema),
+        defaultValues: initialData
     })
 
+    const handleEdit = (e) => {
+        e.stopPropagation()
+        setOpen(true)
+    }
+
     const onSubmit = async (values) => {
+
         setLoading(true)
 
         const body = {
             ...values,
+            todoId: initialData?.todoId,
             parentId: parentId,
             type: "folder",
         }
 
-        const { data = [] } = await createTodo(body)
+        const fn = initialData ? updateTodo : createTodo
+
+        const { data = [] } = await fn(body)
 
         if (data) {
             form.reset()
@@ -51,19 +61,32 @@ const CreateFolderForm = ({ parentId }) => {
             setLoading(false)
             toast.error("Failed to create Folder")
         }
-
     }
 
     return (
         <>
-            <Button onClick={() => setOpen(true)}>
-                <FolderPlusIcon />
-                Create Folders
-            </Button>
+            {
+                initialData ? (
+                    <Button
+                        variant={"outline"}
+                        size={"icon"}
+                        onClick={(e) => handleEdit(e)}
+                    >
+                        <EditIcon />
+                    </Button>
+                ) : (
+                    <Button
+                        onClick={() => setOpen(true)}
+                    >
+                        <FolderPlusIcon />
+                        Create Folders
+                    </Button>
+                )
+            }
             <Dialog open={open} onOpenChange={() => setOpen(false)}>
                 <DialogContent className={"!max-w-sm dark:!border-neutral-700"}>
                     <DialogHeader>
-                        <DialogTitle>Create Folder</DialogTitle>
+                        <DialogTitle>{initialData ? "Edit Folder" : "Create Folder"}</DialogTitle>
                     </DialogHeader>
                     <div className="flex flex-col gap-4 !py-4">
                         <Form {...form}>

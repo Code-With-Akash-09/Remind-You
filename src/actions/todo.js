@@ -19,6 +19,15 @@ export const createTodo = async (body) => {
     return resp;
 }
 
+export const updateTodo = async (body) => {
+    const resp = await fetchClientWithToken(`/v1/todos/update/${body.todoId}`, {
+        method: "PUT",
+        body,
+    });
+
+    return resp;
+}
+
 export const getTodoById = async (todoId) => {
     const resp = await fetchClientWithToken(`/v1/todos/getAll/${todoId}`, {
         method: "GET",
