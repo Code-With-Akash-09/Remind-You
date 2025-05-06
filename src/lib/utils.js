@@ -152,3 +152,15 @@ export const getNestedValue = (obj, keys) =>
 		(acc, key) => (acc && typeof acc === "object" ? acc[key] : undefined),
 		obj
 	);
+
+export const toastMessager = (message, code) => {
+	if (code === 200 || code === 201) {
+		toast.success(message)
+	} else if (code >= 400 && code < 451) {
+		toast.warning(message)
+	} else if (code >= 500 && code < 551) {
+		toast.error(message)
+	} else {
+		toast.info(message)
+	}
+}

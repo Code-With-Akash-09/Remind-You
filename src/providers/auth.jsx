@@ -3,6 +3,7 @@
 import { getProfile, logIn, signUp } from "@/actions/auth"
 import Loading from "@/atoms/loading"
 import Logo from "@/atoms/logo"
+import { toastMessager } from "@/lib/utils"
 import cookieService from "@/services/cookie"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
@@ -14,7 +15,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { DialogTitle } from "@radix-ui/react-dialog"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { toast } from "sonner"
 import { z } from "zod"
 
 const AuthProvider = ({ children }) => {
@@ -27,7 +27,10 @@ const AuthProvider = ({ children }) => {
 	const token = cookieService.getToken("access")
 
 	const getUserProfile = async (token) => {
-		const { data = null } = await getProfile(token)
+		setLoading(true)
+
+		const resp = await getProfile(token)
+		const { data = null } = resp
 
 		if (data) {
 			dispatch({
@@ -39,6 +42,7 @@ const AuthProvider = ({ children }) => {
 				}
 			})
 			setOpen(false)
+			setLoading(false)
 		} else {
 			dispatch({
 				type: "SET_STATE",
@@ -49,13 +53,24 @@ const AuthProvider = ({ children }) => {
 				}
 			})
 			setOpen(true)
+			setLoading(false)
 		}
 		setLoading(false)
 	}
 
 	useEffect(() => {
-		setLoading(true)
-		if (token) getUserProfile(token)
+		if (token) { getUserProfile(token) }
+		else {
+			dispatch({
+				type: "SET_STATE",
+				payload: {
+					user: null,
+					isAuthenticated: false,
+					openAuth: true,
+				}
+			})
+			setOpen(true)
+		}
 	}, [isAuthenticated, token])
 
 	if (loading) return (
@@ -69,7 +84,7 @@ const AuthProvider = ({ children }) => {
 			<div className="flex flex-1 w-full h-full">
 				{
 					!isAuthenticated ? (
-						<Dialog open={open} onOpenChange={() => setOpen(false)}>
+						<Dialog open={open} onOpenChange={() => setOpen(!openAuth)}>
 							<DialogContent className="!max-w-sm dark:!border-neutral-700">
 								<DialogHeader>
 									<DialogTitle className="items-center justify-center flex">
@@ -119,10 +134,24 @@ const SignUpForm = ({ setOpen }) => {
 
 		await signUp(values)
 			.then(result => {
-				setLoading(false)
-				setOpen(false)
-				form.reset()
-				toast.success(result.data.message)
+
+				console.log(result);
+
+				const { data: { code, message, error, token } = null } = result
+
+				if (error) {
+					toastMessager(message, code)
+					dispatch({
+						type: "SET_STATE",
+						payload: {
+							isAuthenticated: false,
+							openAuth: true,
+						}
+					})
+					setLoading(false)
+					setOpen(true)
+				}
+
 				dispatch({
 					type: "SET_STATE",
 					payload: {
@@ -130,16 +159,26 @@ const SignUpForm = ({ setOpen }) => {
 						openAuth: false,
 					}
 				})
-				console.log(result.data.token);
-
 				cookieService.setTokens({
-					accessToken: result.data.token
+					accessToken: token
 				})
+
+				toastMessager(message, code)
+
+				setLoading(false)
+				setOpen(false)
+				form.reset()
 			})
 			.catch(err => {
+				dispatch({
+					type: "SET_STATE",
+					payload: {
+						isAuthenticated: false,
+						openAuth: true,
+					}
+				})
 				setLoading(false)
 				setOpen(true)
-				toast.err(err.data.error)
 			})
 	}
 
@@ -246,10 +285,22 @@ const LogInForm = ({ setOpen }) => {
 
 		await logIn(values)
 			.then(result => {
-				setLoading(false)
-				setOpen(false)
-				form.reset()
-				toast.success(result.data.message)
+
+				const { data: { code, message, error, data = null } = null } = result
+
+				if (error) {
+					toastMessager(message, code)
+					dispatch({
+						type: "SET_STATE",
+						payload: {
+							isAuthenticated: false,
+							openAuth: true,
+						}
+					})
+					setLoading(false)
+					setOpen(true)
+				}
+
 				dispatch({
 					type: "SET_STATE",
 					payload: {
@@ -257,16 +308,26 @@ const LogInForm = ({ setOpen }) => {
 						openAuth: false,
 					}
 				})
-				console.log(result.data.token);
-
 				cookieService.setTokens({
-					accessToken: result.data.token
+					accessToken: data?.token
 				})
+
+				toastMessager(message, code)
+
+				setLoading(false)
+				setOpen(false)
+				form.reset()
 			})
 			.catch(err => {
+				dispatch({
+					type: "SET_STATE",
+					payload: {
+						isAuthenticated: false,
+						openAuth: true,
+					}
+				})
 				setLoading(false)
 				setOpen(true)
-				toast.err(err.data.error)
 			})
 	}
 
@@ -323,7 +384,6 @@ const LogInForm = ({ setOpen }) => {
 		</>
 	)
 }
-
 
 const SignupSchema = z.object({
 	name: z

@@ -103,30 +103,6 @@ export const customFetch = async (
 			...apiDetails,
 		};
 		console.log(`${bgRed("ERROR")}:`, errorDetails);
-
-		// Sentry.withScope(scope => {
-		// 	const errorInstance = error instanceof Error ? error : new Error(error)
-		// 	scope.setContext("API Error Details", errorDetails)
-
-		// 	if (uid) scope.setUser({ id: uid })
-
-		// 	Sentry.captureException(errorInstance)
-		// })
-
-		if (uid) {
-			// posthog.capture({
-			// 	distinctId: uid,
-			// 	event: "error",
-			// 	properties: {
-			// 		error,
-			// 		from,
-			// 		errMsg,
-			// 		tokenType,
-			// 		token,
-			// 		...apiDetails,
-			// 	},
-			// });
-		}
 	};
 
 	try {
@@ -189,7 +165,11 @@ export const customFetch = async (
 		// Parse the response data based on the expected response type
 		try {
 			responseData = await res[options.responseType]();
+			// console.log("responseData", responseData);
+
 		} catch (err) {
+			// console.log("error", err);
+
 			errMsg = `Error reading response as ${options.responseType}: ${err.message}`;
 			apiDetails.errMsg = errMsg;
 			captureError(
@@ -197,11 +177,7 @@ export const customFetch = async (
 				"responseParsing",
 				apiDetails
 			);
-			return {
-				error: true,
-				message: errMsg,
-				data: null,
-			};
+			return { ...responseData?.results };
 		}
 
 		// Handle unsuccessful responses
@@ -210,11 +186,7 @@ export const customFetch = async (
 				errMsg = responseData.message || "Something went wrong";
 				apiDetails.errMsg = errMsg;
 				captureError("API Failed", "apiError", apiDetails);
-				return {
-					error: true,
-					message: errMsg,
-					data: null,
-				};
+				return { ...responseData?.results };
 			}
 
 			// Token refresh flow for 401 Unauthorized error
@@ -228,11 +200,7 @@ export const customFetch = async (
 					"refreshToken",
 					apiDetails
 				);
-				return {
-					error: true,
-					message: errMsg,
-					data: null,
-				};
+				return { ...responseData?.results };
 			}
 
 			// Retry the request with the new access token
@@ -251,20 +219,12 @@ export const customFetch = async (
 					"responseParsing",
 					apiDetails
 				);
-				return {
-					error: true,
-					message: errMsg,
-					data: null,
-				};
+				return { ...responseData.results };
 			}
 
 			// Return the response if retry is successful
 			if (retryRes.ok) {
-				return {
-					error: false,
-					message: retryResData.message ?? "",
-					data: retryResData.results?.data ?? retryResData.results ?? retryResData,
-				};
+				return { ...responseData.results };
 			} else {
 				apiDetails.errMsg = "Failed after retrying with new token";
 				captureError(
@@ -272,28 +232,17 @@ export const customFetch = async (
 					"refreshToken",
 					apiDetails
 				);
-				return {
-					error: true,
-					message: "Failed after retrying with new token",
-					data: null,
-				};
+				return { ...responseData?.results };
 			}
 		}
 
 		// Return successful response data
-		return {
-			error: false,
-			message: responseData.message ?? "",
-			data:
-				responseData.results?.data ??
-				responseData.results ??
-				responseData,
-		};
+		return { ...responseData.results };
 	} catch (err) {
 		errMsg = `Error occurred while fetching ${baseUrl}${endpoint}: ${err.message}`;
 		apiDetails.errMsg = errMsg;
 		captureError("Something went wrong", "apiHandler", apiDetails);
-		return { error: true, message: errMsg, data: null };
+		return { ...responseData?.results };
 	}
 };
 
