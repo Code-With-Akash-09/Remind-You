@@ -26,7 +26,7 @@ const FolderCard = ({ todo }) => {
 
     return (
         <div
-            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 transition-all">
+            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 transition-all bg-white">
             <div
                 onClick={() =>
                     router.push(
@@ -72,7 +72,7 @@ const FileCard = ({ todo }) => {
     const router = useRouter()
 
     return (
-        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 transition-all">
+        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 transition-all bg-white">
             <div
                 onClick={() =>
                     router.push(
