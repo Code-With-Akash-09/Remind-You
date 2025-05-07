@@ -1,8 +1,10 @@
 "use client"
 
+import { logout } from "@/actions/auth"
 import BackBtn from "@/atoms/BackBtn"
 import Logo from "@/atoms/logo"
 import UserAvatar from "@/atoms/userAvatar"
+import { toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/ui/dropdown-menu"
@@ -12,7 +14,6 @@ import { HomeIcon, ListTodo, LogOut, MenuIcon, SettingsIcon, UserRound } from "l
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
-import { toast } from "sonner"
 import CreateFileForm from "../CreateFileForm"
 import CreateFolderForm from "../CreateFolderForm"
 
@@ -85,6 +86,16 @@ export default SidebarProvider
 
 const SidebarItems = ({ toggle }) => {
     const user = useRemindYouStore(store => store.user)
+
+    const handleLogout = () => {
+        logout()
+            .then(() => {
+                toastMessager("Logged Out", 200)
+            })
+            .catch(err => {
+                toastMessager("Failed to logout", 500)
+            })
+    }
 
     return (
         <>
@@ -170,7 +181,7 @@ const SidebarItems = ({ toggle }) => {
                                 <Button
                                     variant="custom"
                                     className={"h-[unset] w-full"}
-                                    onClick={() => toast.success("Logged Out")}
+                                    onClick={handleLogout}
                                 >
                                     Log Out
                                     <DropdownMenuShortcut>

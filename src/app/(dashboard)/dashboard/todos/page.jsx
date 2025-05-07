@@ -70,7 +70,7 @@ const Todos = () => {
                     <div className="flex w-full h-[calc(100%-140px)] overflow-y-auto scrollbar-hide">
                         <div className="grid grid-cols-1 h-fit sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-4">
                             {
-                                todos.map((todo, i) => (
+                                todos?.map((todo, i) => (
                                     <TodoCard key={i} todo={todo} />
                                 ))
                             }
