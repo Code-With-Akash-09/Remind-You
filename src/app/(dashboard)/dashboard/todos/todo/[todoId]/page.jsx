@@ -2,6 +2,7 @@
 
 import { getTodoById } from "@/actions/todo";
 import InputWithLabel from "@/atoms/InputWithLabel";
+import Loading from "@/atoms/loading";
 import CreateFileForm from "@/molecules/CreateFileForm";
 import DeleteTodo from "@/molecules/DeleteTodo";
 import useRemindYouStore from "@/store";
@@ -53,8 +54,8 @@ const TodoId = () => {
         <div className="size-full flex">
             {
                 loading ? (
-                    <div className="flex border w-full">
-
+                    <div className="flex flex-1 items-center justify-center w-full">
+                        <Loading />
                     </div>
                 ) : (
                     <div className="lg:grid lg:grid-cols-4 gap-4 md:divide-x w-full">

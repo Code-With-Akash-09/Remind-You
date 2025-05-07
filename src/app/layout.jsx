@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
 							<QueryParamsProvider />
 						</Suspense>
 						<TooltipProvider>
-							<div className="flex h-full w-full flex-col overflow-hidden">
+							<div className="flex h-full w-full flex-col overflow-hidden bg-gradient-to-r from-blue-50 to-amber-50">
 								{children}
 							</div>
 							<Toaster richColors />
