@@ -1,22 +1,27 @@
-.editor .ProseMirror code.inline {
+.editor .ProseMirror code.inline,
+code.inline {
 	@apply rounded border border-[var(--mt-code-color)] bg-[var(--mt-code-background)] px-1 py-0.5 text-sm;
 }
 
-.editor .ProseMirror pre {
+.editor .ProseMirror pre,
+pre {
 	@apply relative overflow-auto rounded border text-sm;
 	@apply border-[var(--mt-pre-border)] bg-[var(--mt-pre-background)] text-[var(--mt-pre-color)];
 	@apply hyphens-none whitespace-pre text-left;
 }
 
-.editor .ProseMirror code {
+.editor .ProseMirror code,
+code {
 	@apply break-words leading-[1.7em];
 }
 
-.editor .ProseMirror pre code {
+.editor .ProseMirror pre code,
+pre code {
 	@apply block overflow-x-auto p-3.5;
 }
 
-.editor .ProseMirror pre {
+.editor .ProseMirror pre,
+pre {
 
 	.hljs-keyword,
 	.hljs-operator,

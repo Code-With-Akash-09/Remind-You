@@ -1,6 +1,6 @@
 "use client"
 
-import { createTodo } from "@/actions/todo"
+import { createTodo, updateTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
 import { cn } from "@/lib/utils"
 import useRemindYouStore from "@/store"
@@ -12,25 +12,35 @@ import { Input } from "@/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/ui/sheet"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
-import { CalendarIcon, FilePlusIcon } from "lucide-react"
+import { CalendarIcon, EditIcon, FilePlusIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 import Editor from "./editor"
 
-const CreateFileForm = ({ parentId }) => {
+const CreateFileForm = ({ parentId, initialData = null }) => {
 
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
 
-
     const form = useForm({
         resolver: zodResolver(CreateFileSchema),
+        defaultValues: {
+            ...initialData,
+            startDate: initialData?.startDate ? new Date(initialData?.startDate) : null,
+            endDate: initialData?.endDate ? new Date(initialData?.endDate) : null,
+        }
     })
+
+    const handleEdit = (e) => {
+        e.stopPropagation()
+        setOpen(true)
+    }
 
     const content = form.watch("content")
 
@@ -39,11 +49,14 @@ const CreateFileForm = ({ parentId }) => {
 
         const body = {
             ...values,
+            todoId: initialData?.todoId,
             parentId: parentId,
             type: "file",
         }
 
-        const { data = [] } = await createTodo(body)
+        const fn = initialData ? updateTodo : createTodo
+
+        const { data = [] } = await fn(body)
 
         if (data) {
             form.reset()
@@ -66,15 +79,34 @@ const CreateFileForm = ({ parentId }) => {
 
     return (
         <>
-            <Button
-                variant={"outline"}
-                onClick={() => setOpen(true)}
-            >
-                <FilePlusIcon />
-                <span className="hidden md:flex">
-                    Create File
-                </span>
-            </Button>
+            {
+                initialData ? (
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    onClick={(e) => handleEdit(e)}
+                                >
+                                    <EditIcon /> Edit
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent className="w-fit">
+                                Edit
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                ) : (
+                    <Button
+                        variant={"outline"}
+                        onClick={() => setOpen(true)}
+                    >
+                        <FilePlusIcon />
+                        <span className="hidden md:flex">
+                            Create File
+                        </span>
+                    </Button>
+                )
+            }
             <Sheet open={open} onOpenChange={() => setOpen(false)}>
                 <SheetContent className={"sm:max-w-2xl"}>
                     <SheetHeader>
@@ -237,7 +269,7 @@ const CreateFileForm = ({ parentId }) => {
                                                         output="html"
                                                         placeholder="Enter your content here"
                                                         editable
-                                                        editorClassName="focus:outline-none"
+                                                        editorClassName="focus:outline-none !h-[calc(100vh-380px)]"
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -283,8 +315,8 @@ const CreateFileSchema = z.object({
         .regex(/^[a-zA-Z0-9 ]+$/, "Only letters, digits, and spaces are allowed.")
         .trim(),
     status: z.string().trim().optional(),
-    end: z.date().optional(),
-    endDate: z.date().optional(),
+    startDate: z.date().optional().nullish(),
+    endDate: z.date().optional().nullish(),
     content: z.string().optional(),
 })
 

@@ -96,7 +96,7 @@
 .editor .ProseMirror {
 	@apply flex max-w-full flex-1 cursor-text flex-col;
 	@apply z-0 outline-0;
-	@apply h-full max-h-60 overflow-y-auto overflow-x-hidden p-4 scrollbar
+	@apply h-full overflow-y-auto overflow-x-hidden p-4 scrollbar
 }
 
 .editor .ProseMirror>div.editor {

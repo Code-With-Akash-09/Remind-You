@@ -16,7 +16,6 @@ const BackBtn = () => {
     return (
         <>
             <Button
-                size={"icon"}
                 onClick={handleClick}
             >
                 <ArrowLeftIcon className="size-5" />

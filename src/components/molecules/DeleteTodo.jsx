@@ -10,7 +10,7 @@ import { TooltipTrigger } from "@radix-ui/react-tooltip"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 
-const DeleteTodo = ({ todoId, type }) => {
+const DeleteTodo = ({ todoId, text, type }) => {
 
     const [open, setOpen] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
@@ -46,10 +46,10 @@ const DeleteTodo = ({ todoId, type }) => {
                     <TooltipTrigger asChild>
                         <Button
                             variant={"outline"}
-                            size={"icon"}
+                            size={text ? "default" : "icon"}
                             onClick={() => setOpen(true)}
                         >
-                            <TrashIcon />
+                            <TrashIcon /> {text ?? text}
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent className={"w-fit"}>

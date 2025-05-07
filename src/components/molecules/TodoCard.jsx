@@ -76,7 +76,7 @@ const FileCard = ({ todo }) => {
             <div
                 onClick={() =>
                     router.push(
-                        `/dashboard/todo/${todo.todoId}`
+                        `/dashboard/todos/todo/${todo.todoId}`
                     )
                 }
                 className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">

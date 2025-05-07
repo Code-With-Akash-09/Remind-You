@@ -85,7 +85,7 @@ const Editor = ({
 			<EditorContent
 				editor={editor}
 				className={cn(
-					"editor flex max-h-60 flex-1",
+					"editor flex flex-1 border",
 					editorContentClassName
 				)}
 			/>

@@ -63,17 +63,23 @@ const SidebarProvider = ({ children }) => {
                 </div>
             </motion.div>
             <div className="flex flex-col flex-grow">
-                <div className="flex w-full justify-between p-2 md:p-4 border-b border-neutral-200">
+                <div className="flex w-full justify-between p-3 border-b border-neutral-200">
                     <div className="flex w-fit gap-4 items-center font-bold text-2xl">
                         {todoId && <BackBtn />}
                         {getSectionTitle(pathname)}
                     </div>
                     <div className="flex w-fit gap-4">
-                        <CreateFolderForm parentId={todoId ?? null} />
-                        <CreateFileForm parentId={todoId ?? null} />
+                        {
+                            pathname !== `/dashboard/todos/todo/${todoId}` && (
+                                <>
+                                    <CreateFolderForm parentId={todoId ?? null} />
+                                    <CreateFileForm parentId={todoId ?? null} />
+                                </>
+                            )
+                        }
                     </div>
                 </div>
-                <div className="flex flex-1 w-full p-2 md:p-4">
+                <div className="flex flex-1 w-full p-3">
                     {children}
                 </div>
             </div>
