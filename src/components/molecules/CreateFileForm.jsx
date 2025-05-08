@@ -317,7 +317,7 @@ const CreateFileSchema = z.object({
     status: z.string().trim().optional(),
     startDate: z.date().optional().nullish(),
     endDate: z.date().optional().nullish(),
-    content: z.string().optional(),
+    content: z.string().optional().nullish(),
 })
 
 const TodoState = [

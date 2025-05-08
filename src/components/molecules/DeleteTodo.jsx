@@ -8,12 +8,14 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Tooltip, TooltipContent, TooltipProvider } from "@/ui/tooltip"
 import { TooltipTrigger } from "@radix-ui/react-tooltip"
 import { TrashIcon } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const DeleteTodo = ({ todoId, text, type }) => {
 
     const [open, setOpen] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
+    const router = useRouter()
 
     const handleDelete = async () => {
         await deleteTodo(todoId)
@@ -33,6 +35,7 @@ const DeleteTodo = ({ todoId, text, type }) => {
                     }
                 })
                 setOpen(false)
+                if (type === "file") router.push("/dashboard/todos")
             })
             .catch(err => {
                 toastMessager(err.message, 500)
