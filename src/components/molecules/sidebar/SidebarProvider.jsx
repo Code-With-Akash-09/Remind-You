@@ -10,7 +10,7 @@ import { Button } from "@/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from "@/ui/dropdown-menu"
 import { Separator } from "@/ui/separator"
 import { AnimatePresence, motion } from "framer-motion"
-import { HomeIcon, ListTodo, LogOut, MenuIcon, SettingsIcon, UserRound } from "lucide-react"
+import { HomeIcon, ListTodo, LogOut, MenuIcon, UserRound } from "lucide-react"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
@@ -214,9 +214,9 @@ const NavList = [
         url: "/dashboard/todos",
         icon: ListTodo,
     },
-    {
-        name: "Setting",
-        url: "/setting",
-        icon: SettingsIcon,
-    }
+    // {
+    //     name: "Setting",
+    //     url: "/setting",
+    //     icon: SettingsIcon,
+    // }
 ]
