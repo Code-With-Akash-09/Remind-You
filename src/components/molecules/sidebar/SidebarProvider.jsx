@@ -36,7 +36,7 @@ const SidebarProvider = ({ children }) => {
                 animate={{ width: isToggle ? 248 : 70 }}
                 initial={{ width: 248 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
-                className={`flex p-3 bg-white`}
+                className={`flex p-3`}
             >
                 <div className="flex flex-col gap-4 w-full">
                     <div className="flex gap-4 w-full">
@@ -63,7 +63,7 @@ const SidebarProvider = ({ children }) => {
                 </div>
             </motion.div>
             <div className="flex flex-col flex-grow">
-                <div className="flex w-full justify-between p-3 border-b bg-white  border-neutral-200">
+                <div className="flex w-full justify-between p-3 border-b  border-neutral-200">
                     <div className="flex w-fit gap-4 items-center font-bold text-2xl">
                         {todoId && <BackBtn />}
                         {getSectionTitle(pathname)}

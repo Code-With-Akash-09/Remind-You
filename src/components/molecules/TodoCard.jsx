@@ -26,7 +26,7 @@ const FolderCard = ({ todo }) => {
 
     return (
         <div
-            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 transition-all bg-white">
+            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 transition-all">
             <div
                 onClick={() =>
                     router.push(
@@ -35,7 +35,7 @@ const FolderCard = ({ todo }) => {
                 }
                 className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
                 <div className="flex w-full">
-                    <span className="font-bold text-lg text-neutral-800">
+                    <span className="font-bold text-lg text-neutral-800 line-clamp-1">
                         {todo.label}
                     </span>
                 </div>
@@ -72,7 +72,7 @@ const FileCard = ({ todo }) => {
     const router = useRouter()
 
     return (
-        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 transition-all bg-white">
+        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 transition-all">
             <div
                 onClick={() =>
                     router.push(
@@ -81,7 +81,7 @@ const FileCard = ({ todo }) => {
                 }
                 className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
                 <div className="flex w-full">
-                    <span className="font-bold text-lg text-neutral-800">
+                    <span className="font-bold text-lg text-neutral-800 line-clamp-1">
                         {todo.label}
                     </span>
                 </div>
