@@ -1,3 +1,4 @@
+import TodoStatusBadge from "@/atoms/TodoStatusBadge"
 import { format } from "date-fns"
 import { useRouter } from "next/navigation"
 import CreateFolderForm from "./CreateFolderForm"
@@ -85,11 +86,10 @@ const FileCard = ({ todo }) => {
                         {todo.label}
                     </span>
                 </div>
-                <div className="flex flex-col gap-1 w-full">
+                <div className="flex flex-col gap-2 w-full">
                     <span className="text-sm text-neutral-800">
-                        <b>Status:</b> In Progress
+                        <TodoStatusBadge status={todo?.status} />
                     </span>
-                    <span className="bg-neutral-300 rounded-full h-2 w-2/4"></span>
                 </div>
             </div>
             <div className="flex flex-grow-0 w-full px-4 py-2">

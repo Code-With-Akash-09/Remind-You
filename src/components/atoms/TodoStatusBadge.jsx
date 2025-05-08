@@ -5,7 +5,7 @@ const TodoStatusBadge = ({ status }) => {
 
     return (
         <span
-            className={`px-3 py-1 text-xs font-medium rounded-md text-center ${todoStatus?.className}`}
+            className={`px-2 py-0.5 text-xs font-medium rounded-md w-fit text-center ${todoStatus?.className}`}
         >
             {todoStatus?.label}
         </span>

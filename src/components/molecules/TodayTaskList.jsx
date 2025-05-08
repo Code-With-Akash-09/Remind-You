@@ -2,7 +2,6 @@
 
 import { getAllTodosByState } from "@/actions/dashboard";
 import TodoStatusBadge from "@/atoms/TodoStatusBadge";
-import { toastMessager } from "@/lib/utils";
 import useRemindYouStore from "@/store";
 import { Skeleton } from "@/ui/skeleton";
 import { FileClockIcon, GhostIcon } from "lucide-react";
@@ -14,6 +13,8 @@ const TodayTaskList = () => {
     const [loading, setLoading] = useState(false)
     const [todos, setTodos] = useState([])
     const isAuthenticated = useRemindYouStore(state => state.isAuthenticated)
+    const todoCreated = useRemindYouStore(state => state.todoCreated)
+    const todoDeleted = useRemindYouStore(state => state.todoDeleted)
 
     const getTodos = async () => {
         setLoading(true)
@@ -21,7 +22,6 @@ const TodayTaskList = () => {
 
         if (error) {
             setLoading(false)
-            toastMessager("Failed to Load Today Tasks", 500)
         }
 
         setTodos(data?.result)
@@ -31,8 +31,12 @@ const TodayTaskList = () => {
     const cards = Array.from({ length: 4 }, (_, i) => i + 1);
 
     useEffect(() => {
-        if (isAuthenticated) getTodos()
+        isAuthenticated ? getTodos() : setTodos([])
     }, [isAuthenticated])
+
+    useEffect(() => {
+        isAuthenticated ? getTodos() : setTodos([])
+    }, [todoCreated, todoDeleted])
 
     return (
         <>
@@ -58,17 +62,17 @@ const TodayTaskList = () => {
                             <Link
                                 key={todo?.todoId}
                                 href={`/dashboard/todos/todo/${todo?.todoId}`}
-                                className="flex flex-col py-3 gap-2 rounded-md group w-full border border-neutral-200 transition-all hover:border-neutral-300"
+                                className="grid grid-cols-5 flex-col p-2 gap-2 rounded-md group w-full border border-neutral-200 transition-all hover:border-neutral-300"
                             >
-                                <div className="flex px-3 gap-2 w-full items-center">
-                                    <FileClockIcon />
+                                <div className="flex w-full bg-amber-400 rounded-md items-center justify-center">
+                                    <FileClockIcon className="text-white !size-5" />
+                                </div>
+                                <div className="flex flex-col w-full gap-1 col-span-4">
                                     <TodoStatusBadge
                                         status={todo?.status}
                                     />
-                                </div>
-                                <div className="flex px-3 w-full">
-                                    <span className="text-sm line-clamp-1">
-                                        {todo?.label} fjdkla hjkda hjkla hjksla jklsa jkla
+                                    <span className="text-sm line-clamp-1 font-medium text-neutral-700">
+                                        {todo?.label}
                                     </span>
                                 </div>
                             </Link>

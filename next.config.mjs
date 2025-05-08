@@ -12,12 +12,13 @@ const nextConfig = {
     async redirects() {
         return [
             {
-                source: "/crm",
-                destination: "/crm/mtech",
-                permanent: false,
+                source: "/dashboard/todos/todo",
+                destination: "/dashboard/todos",
+                permanent: true,
             },
         ]
-    }
+    },
+    devIndicators: false,
 };
 
 export default nextConfig;
