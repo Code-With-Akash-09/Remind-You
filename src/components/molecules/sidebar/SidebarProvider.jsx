@@ -63,7 +63,8 @@ const SidebarProvider = ({ children }) => {
                 </div>
             </motion.div>
             <div className="flex flex-col flex-grow">
-                <div className="flex w-full justify-between p-3 border-b  border-neutral-200">
+                <div className="flex w-full justify-between p-3 border-b
+                 border-neutral-200">
                     <div className="flex w-fit gap-4 items-center font-bold text-2xl">
                         {todoId && <BackBtn />}
                         {getSectionTitle(pathname)}
@@ -174,7 +175,7 @@ const SidebarItems = ({ toggle }) => {
                         <DropdownMenuGroup>
                             <DropdownMenuItem asChild>
                                 <Link
-                                    href={`/dashboard/users/${user?.uid}`}
+                                    href={`/dashboard/user/profile`}
                                     className="cursor-pointer"
                                 >
                                     User Profile

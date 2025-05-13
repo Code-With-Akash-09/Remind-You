@@ -37,7 +37,7 @@ export const getProfile = async (fallbackToken) => {
 };
 
 export const setProfile = async (body) => {
-	const resp = await fetchClientWithToken("/v3/tc/user", {
+	const resp = await fetchClientWithToken("/v1/user/profile/edit", {
 		method: "PUT",
 		body,
 	});

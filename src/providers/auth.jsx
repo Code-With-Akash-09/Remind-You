@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
 	const isAuthenticated = useRemindYouStore(state => state.isAuthenticated)
 	const dispatch = useRemindYouStore((state) => state.dispatch)
 	const openAuth = useRemindYouStore((state) => state.openAuth)
-
+	const userUpdated = useRemindYouStore((state) => state.userUpdated)
 	const token = cookieService.getToken("access")
 
 	const getUserProfile = async (token) => {
@@ -40,6 +40,7 @@ const AuthProvider = ({ children }) => {
 					user: data.result,
 					isAuthenticated: true,
 					openAuth: false,
+					userUpdated: false,
 				}
 			})
 			setOpen(false)
@@ -51,6 +52,7 @@ const AuthProvider = ({ children }) => {
 					user: null,
 					isAuthenticated: false,
 					openAuth: true,
+					userUpdated: false,
 				}
 			})
 			setOpen(true)
@@ -68,11 +70,12 @@ const AuthProvider = ({ children }) => {
 					user: null,
 					isAuthenticated: false,
 					openAuth: true,
+					userUpdated: false
 				}
 			})
 			setOpen(true)
 		}
-	}, [isAuthenticated, token])
+	}, [isAuthenticated, token, userUpdated])
 
 	if (loading) return (
 		<div className="flex w-full items-center justify-center h-full">
