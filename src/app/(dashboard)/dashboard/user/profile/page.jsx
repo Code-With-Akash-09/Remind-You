@@ -27,7 +27,7 @@ const Profile = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 w-full h-fit md:h-full md:divide-x md:divide-neutral-200 dark:md:divide-neutral-800">
                 <div className="flex flex-col gap-4 w-full md:col-span-2 lg:col-span-1">
                     <div className="flex flex-col w-full">
-                        <div className="flex gap-4 rounded-xl p-4 w-full">
+                        <div className="flex gap-4 rounded-xl md:p-4 w-full">
                             <div className="flex h-20 w-20 border-2 border-neutral-200 dark:border-neutral-800 rounded-full">
                                 <UserAvatar
                                     alt={user?.name ?? "John Doe"}

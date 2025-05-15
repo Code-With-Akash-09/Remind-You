@@ -78,6 +78,7 @@ const SidebarProvider = ({ children }) => {
                 <div className="flex w-full justify-between p-3 border-b
                  border-neutral-200 dark:border-neutral-700">
                     <div className="flex w-fit gap-4 items-center font-bold text-2xl">
+                        {!isToggle && <Logo isMobile={true} />}
                         {todoId && <BackBtn />}
                         {getSectionTitle(pathname)}
                     </div>
