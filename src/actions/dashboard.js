@@ -9,3 +9,11 @@ export const getAllTodosByState = async (statusId) => {
 
     return resp;
 }
+
+export const searchTodos = async (query) => {
+    const resp = await fetchClientWithToken(`/v1/todos/dashboard/search?query=${query}`, {
+        method: "GET",
+    });
+
+    return resp;
+}
