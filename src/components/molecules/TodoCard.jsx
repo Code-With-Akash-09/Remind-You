@@ -27,30 +27,30 @@ const FolderCard = ({ todo }) => {
 
     return (
         <div
-            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 transition-all">
+            className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-cover bg-center hover:shadow-md border-amber-400 dark:border-amber-400/60 transition-all">
             <div
                 onClick={() =>
                     router.push(
                         `/dashboard/todos/${todo.todoId}?parentId=${todo.parentId}`
                     )
                 }
-                className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
+                className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 dark:border-neutral-700 w-full p-4 ">
                 <div className="flex w-full">
-                    <span className="font-bold text-lg text-neutral-800 line-clamp-1">
+                    <span className="font-bold text-lg text-neutral-800 dark:text-neutral-200 line-clamp-1">
                         {todo.label}
                     </span>
                 </div>
                 <div className="flex flex-col gap-1 w-full">
-                    <span className="text-sm text-neutral-800">
+                    <span className="text-sm text-neutral-800 dark:text-neutral-200">
                         <b>Folder:</b> {todo.count?.folder}
                     </span>
-                    <span className="text-sm text-neutral-800">
+                    <span className="text-sm text-neutral-800 dark:text-neutral-200">
                         <b>File:</b> {todo.count?.file}
                     </span>
                 </div>
             </div>
             <div className="flex flex-grow-0 w-full px-4 py-2">
-                <span className="text-[10px] text-neutral-500">
+                <span className="text-[10px] text-neutral-500 dark:text-neutral-200">
                     {format(todo.createdAt, "Pp")}
                 </span>
             </div>
@@ -73,27 +73,27 @@ const FileCard = ({ todo }) => {
     const router = useRouter()
 
     return (
-        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 transition-all">
+        <div className="flex flex-col aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-cover bg-center hover:shadow-md border-blue-400 dark:border-blue-400/60 transition-all">
             <div
                 onClick={() =>
                     router.push(
                         `/dashboard/todos/todo/${todo.todoId}`
                     )
                 }
-                className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 w-full p-4 ">
+                className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 dark:border-neutral-700 w-full p-4 ">
                 <div className="flex w-full">
-                    <span className="font-bold text-lg text-neutral-800 line-clamp-1">
+                    <span className="font-bold text-lg text-neutral-800 dark:text-neutral-200 line-clamp-1">
                         {todo.label}
                     </span>
                 </div>
                 <div className="flex flex-col gap-2 w-full">
-                    <span className="text-sm text-neutral-800">
+                    <span className="text-sm text-neutral-800 dark:text-neutral-200">
                         <TodoStatusBadge status={todo?.status} />
                     </span>
                 </div>
             </div>
             <div className="flex flex-grow-0 w-full px-4 py-2">
-                <span className="text-[10px] text-neutral-500">
+                <span className="text-[10px] text-neutral-500  dark:text-neutral-200">
                     {format(todo.createdAt, "Pp")}
                 </span>
             </div>

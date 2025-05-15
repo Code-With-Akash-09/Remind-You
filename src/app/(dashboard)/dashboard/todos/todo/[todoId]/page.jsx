@@ -6,6 +6,7 @@ import Loading from "@/atoms/loading";
 import CreateFileForm from "@/molecules/CreateFileForm";
 import DeleteTodo from "@/molecules/DeleteTodo";
 import useRemindYouStore from "@/store";
+import { Separator } from "@/ui/separator";
 import { format } from "date-fns";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -54,19 +55,19 @@ const TodoId = () => {
         <div className="size-full flex">
             {
                 loading ? (
-                    <div className="flex flex-1 items-center justify-center w-full bg-gradient-to-r from-blue-50 to-amber-50">
+                    <div className="flex flex-1 items-center justify-center w-full bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-600/10 dark:to-amber-600/10">
                         <Loading />
                     </div>
                 ) : (
-                    <div className="lg:grid lg:grid-cols-4 gap-4 md:divide-x w-full">
+                    <div className="lg:grid lg:grid-cols-4 gap-4 md:divide-x md:divide-neutral-200  dark:md:divide-neutral-800 w-full">
                         <div className="flex flex-1 overflow-x-auto w-full lg:col-span-3 rounded-md p-4">
                             <div className="flex flex-col w-full gap-4 h-fit">
                                 <h1 className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-extrabold">
                                     {todo?.label}
                                 </h1>
-                                <hr />
+                                <Separator />
                                 <div
-                                    className="prose !max-w-full"
+                                    className="prose !max-w-full dark:prose-invert"
                                     dangerouslySetInnerHTML={{ __html: todo?.content }}
                                 />
                             </div>

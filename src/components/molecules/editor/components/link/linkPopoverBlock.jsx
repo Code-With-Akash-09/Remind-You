@@ -29,7 +29,7 @@ const LinkPopoverBlock = ({ url, onClear, onEdit }) => {
 	}, [url])
 
 	return (
-		<div className="flex h-10 overflow-hidden rounded bg-white p-2 shadow-lg">
+		<div className="flex h-10 overflow-hidden rounded bg-white dark:bg-neutral-900 p-2 shadow-lg">
 			<div className="inline-flex items-center gap-1">
 				<ToolbarButton
 					tooltip="Edit link"

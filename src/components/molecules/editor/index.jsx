@@ -77,7 +77,7 @@ const Editor = ({
 	return (
 		<div
 			className={cn(
-				"flex h-72 w-full flex-col divide-y divide-neutral-200 rounded-md border border-neutral-200 bg-white shadow-sm",
+				"flex h-72 w-full flex-col divide-y divide-neutral-200 dark:divide-neutral-700 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-950 shadow-sm",
 				className
 			)}
 		>
@@ -85,7 +85,7 @@ const Editor = ({
 			<EditorContent
 				editor={editor}
 				className={cn(
-					"editor flex flex-1 border",
+					"editor flex flex-1 border border-neutral-200 dark:border-neutral-700",
 					editorContentClassName
 				)}
 			/>

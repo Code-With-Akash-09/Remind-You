@@ -43,7 +43,7 @@ const Todos = () => {
         <div className="size-full flex">
             {
                 todos?.length <= 0 ? (
-                    <div className="size-full flex items-center bg-gradient-to-r from-blue-50 to-amber-50 justify-center rounded-md">
+                    <div className="size-full flex items-center bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-600/10 dark:to-amber-600/10 justify-center rounded-md">
                         <div className="flex flex-col gap-4 w-full max-w-sm items-center justify-center">
                             {
                                 loading ? <Loading /> : (
@@ -57,7 +57,7 @@ const Todos = () => {
                                             />
                                         </div>
                                         <div className="flex w-full items-center justify-center">
-                                            <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl text-neutral-700 font-bold">
+                                            <span className="text-lg md:text-xl lg:text-2xl xl:text-3xl text-neutral-700 dark:text-neutral-400 font-bold">
                                                 You have Empty Todos
                                             </span>
                                         </div>

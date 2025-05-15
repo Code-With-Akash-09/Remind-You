@@ -31,7 +31,7 @@ const SidebarProvider = ({ children }) => {
     }
 
     return (
-        <div className="size-full flex divide-x">
+        <div className="size-full flex divide-x divide-neutral-200 dark:divide-neutral-700">
             <motion.div
                 animate={{ width: isToggle ? 248 : 70 }}
                 initial={{ width: 248 }}
@@ -64,7 +64,7 @@ const SidebarProvider = ({ children }) => {
             </motion.div>
             <div className="flex flex-col flex-grow">
                 <div className="flex w-full justify-between p-3 border-b
-                 border-neutral-200">
+                 border-neutral-200 dark:border-neutral-700">
                     <div className="flex w-fit gap-4 items-center font-bold text-2xl">
                         {todoId && <BackBtn />}
                         {getSectionTitle(pathname)}
@@ -115,7 +115,7 @@ const SidebarItems = ({ toggle }) => {
                                     href={item.url}
                                     className="flex gap-4 items-center w-full"
                                 >
-                                    <div className="flex h-full w-fit border border-neutral-200 bg-amber-400 text-white rounded-md items-center justify-center">
+                                    <div className="flex h-full w-fit border border-neutral-200 dark:border-neutral-700 bg-amber-400 text-white rounded-md items-center justify-center">
                                         <span className="px-3 py-2">
                                             <item.icon className="size-5" />
                                         </span>

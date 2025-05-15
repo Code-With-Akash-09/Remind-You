@@ -65,7 +65,7 @@ const EditProfile = ({ user = null }) => {
             </Button>
             <Sheet open={open} onOpenChange={() => setOpen(false)}>
                 <SheetContent>
-                    <SheetHeader className={"border"}>
+                    <SheetHeader className={"border border-neutral-200 dark:border-neutral-800"}>
                         <SheetTitle>Edit Profile</SheetTitle>
                     </SheetHeader>
                     <div className="flex w-full px-6">

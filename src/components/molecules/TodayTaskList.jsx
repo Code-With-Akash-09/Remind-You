@@ -62,7 +62,7 @@ const TodayTaskList = () => {
                             <Link
                                 key={todo?.todoId}
                                 href={`/dashboard/todos/todo/${todo?.todoId}`}
-                                className="grid grid-cols-5 flex-col p-2 gap-2 rounded-md group w-full border border-neutral-200 transition-all hover:border-neutral-300"
+                                className="grid grid-cols-5 flex-col p-2 gap-2 rounded-md group w-full border border-neutral-200 dark:border-neutral-700 transition-all hover:border-neutral-300 dark:border-neutral-800"
                             >
                                 <div className="flex w-full bg-amber-400 rounded-md items-center justify-center">
                                     <FileClockIcon className="text-white !size-5" />

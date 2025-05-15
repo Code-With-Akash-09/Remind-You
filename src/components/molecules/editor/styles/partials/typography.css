@@ -19,7 +19,7 @@
 }
 
 .editor .ProseMirror a.link {
-	@apply cursor-pointer text-neutral-900;
+	@apply cursor-pointer text-neutral-900 dark:text-neutral-200;
 }
 
 .editor .ProseMirror a.link:hover {
