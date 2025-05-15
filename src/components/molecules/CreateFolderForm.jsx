@@ -2,6 +2,7 @@
 
 import { createTodo, updateTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
+import { toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog"
@@ -56,7 +57,7 @@ const CreateFolderForm = ({ parentId, initialData = null }) => {
             })
             setOpen(false)
             setLoading(false)
-            toast.success("Folder Created Successfully")
+            toastMessager(data?.message, data?.code)
         }
         else {
             setLoading(false)

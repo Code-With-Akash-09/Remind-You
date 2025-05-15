@@ -2,7 +2,7 @@
 
 import { createTodo, updateTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
-import { cn } from "@/lib/utils"
+import { cn, toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Calendar } from "@/ui/calendar"
@@ -56,7 +56,10 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
 
         const fn = initialData ? updateTodo : createTodo
 
-        const { data = [] } = await fn(body)
+        const { data = [], error, message } = await fn(body)
+
+        console.log(data, error, message);
+
 
         if (data) {
             form.reset()
@@ -68,11 +71,11 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
             })
             setOpen(false)
             setLoading(false)
-            toast.success("Folder Created Successfully")
+            toastMessager(data?.message, data?.code)
         }
         else {
             setLoading(false)
-            toast.error("Failed to create Folder")
+            toast.error("Failed to create File")
         }
 
     }
