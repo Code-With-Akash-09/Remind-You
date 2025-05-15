@@ -8,6 +8,7 @@ import { Button } from "@/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
 import { Input } from "@/ui/input"
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/ui/sheet"
+import { Textarea } from "@/ui/textarea"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { UserPenIcon } from "lucide-react"
 import { useState } from "react"
@@ -124,6 +125,40 @@ const EditProfile = ({ user = null }) => {
                                         </FormItem>
                                     )}
                                 />
+                                <FormField
+                                    control={form.control}
+                                    name="designation"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Designation</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    placeholder="Enter Your Designation"
+                                                    {...field}
+                                                    value={field.value || ""}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Description</FormLabel>
+                                            <FormControl>
+                                                <Textarea
+                                                    placeholder="Enter Your Description"
+                                                    {...field}
+                                                    value={field.value || ""}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <div className="grid grid-cols-2 gap-4">
                                     <SheetClose asChild>
                                         <Button
@@ -168,4 +203,12 @@ const EditProfileSchema = z.object({
         .max(10, { message: "Mobile number is too long" })
         .regex(/^[0-9]+$/, "Only numbers are allowed.")
         .trim(),
+    designation: z
+        .string()
+        .trim()
+        .optional(),
+    description: z
+        .string()
+        .trim()
+        .optional(),
 })
