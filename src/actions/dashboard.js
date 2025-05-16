@@ -17,3 +17,11 @@ export const searchTodos = async (query) => {
 
     return resp;
 }
+
+export const getTodosCount = async () => {
+    const resp = await fetchClientWithToken(`/v1/todos/dashboard/counts`, {
+        method: "GET",
+    });
+
+    return resp;
+}

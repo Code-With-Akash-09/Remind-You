@@ -45,6 +45,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
     const content = form.watch("content")
 
     const onSubmit = async (values) => {
+
         setLoading(true)
 
         const body = {
@@ -56,10 +57,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
 
         const fn = initialData ? updateTodo : createTodo
 
-        const { data = [], error, message } = await fn(body)
-
-        console.log(data, error, message);
-
+        const { data = [] } = await fn(body)
 
         if (data) {
             form.reset()
