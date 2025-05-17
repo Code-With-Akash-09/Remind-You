@@ -2,7 +2,8 @@ import { getTodosCount } from "@/actions/dashboard";
 
 const TotalTodoCount = async () => {
 
-    const { data: { result = {} } = null } = await getTodosCount()
+    const resp = await getTodosCount();
+    const result = resp?.data?.result
 
     return (
         <>
