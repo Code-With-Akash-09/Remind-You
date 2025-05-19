@@ -1,7 +1,7 @@
 "use client"
 
 import { deleteTodo } from "@/actions/todo"
-import { toastMessager } from "@/lib/utils"
+import { cn, toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/ui/dialog"
@@ -11,7 +11,7 @@ import { TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 
-const DeleteTodo = ({ todoId, text, type }) => {
+const DeleteTodo = ({ todoId, text, type, className, iconClassName }) => {
 
     const [open, setOpen] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
@@ -52,8 +52,9 @@ const DeleteTodo = ({ todoId, text, type }) => {
                             variant={"outline"}
                             size={text ? "default" : "icon"}
                             onClick={() => setOpen(true)}
+                            className={cn(className)}
                         >
-                            <TrashIcon /> {text ?? text}
+                            <TrashIcon className={cn(iconClassName)} /> {text ?? text}
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent className={"w-fit"}>
