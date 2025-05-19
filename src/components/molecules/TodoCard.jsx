@@ -41,10 +41,10 @@ const FolderCard = ({ todo }) => {
                     </span>
                 </div>
                 <div className="flex flex-col gap-0 sm:gap-1 w-full">
-                    <span className="text-[8px] md:text-xs font-medium text-neutral-800 dark:text-neutral-200">
+                    <span className="text-[8px] md:text-xs font-normal text-neutral-700 dark:text-neutral-200">
                         <b>Folder:</b> {todo.count?.folder}
                     </span>
-                    <span className="text-[8px] md:text-xs font-medium text-neutral-800 dark:text-neutral-200">
+                    <span className="text-[8px] md:text-xs font-normal text-neutral-700 dark:text-neutral-200">
                         <b>File:</b> {todo.count?.file}
                     </span>
                 </div>
@@ -61,13 +61,13 @@ const FolderCard = ({ todo }) => {
                     parentId={todo.parentId}
                     initialData={todo}
                     className={"size-6 md:size-8"}
-                    iconClassName={"!size-3 md:!size-4"}
+                    iconClassName={"!size-3"}
                 />
                 <DeleteTodo
                     todoId={todo.todoId}
                     type="folder"
                     className={"size-6 md:size-8"}
-                    iconClassName={"!size-3 md:!size-4"}
+                    iconClassName={"!size-3"}
                 />
             </div>
         </div>
@@ -111,7 +111,7 @@ const FileCard = ({ todo }) => {
                     todoId={todo.todoId}
                     type="file"
                     className={"size-6 md:size-8"}
-                    iconClassName={"!size-3 md:!size-4"}
+                    iconClassName={"!size-3"}
                 />
             </div>
         </div>

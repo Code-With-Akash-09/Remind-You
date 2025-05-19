@@ -26,6 +26,8 @@ const SidebarProvider = ({ children }) => {
     const [isToggle, setIsToggle] = useState(false)
     const { todoId } = useParams()
     const isMD = useMediaQuery("(max-width: 768px)");
+    const isActive = (url) => url === pathname
+
 
     const getSectionTitle = (pathname) => {
         return SidebarNavList.find(item => item.url === pathname)?.name || ""
@@ -40,7 +42,7 @@ const SidebarProvider = ({ children }) => {
             {
                 isMD ? (
                     <div className="flex p-2 border border-neutral-200 dark:border-neutral-800 fixed z-10 bottom-2 rounded-xl inset-x-0 w-fit max-w-lg mx-auto bg-neutral-200 dark:bg-neutral-950">
-                        <BottomNav />
+                        <BottomNav isActive={isActive} />
                     </div>
                 ) : (
                     <motion.div
@@ -70,7 +72,7 @@ const SidebarProvider = ({ children }) => {
                                     )}
                                 </AnimatePresence>
                             </div>
-                            <SidebarItems toggle={isToggle} />
+                            <SidebarItems toggle={isToggle} isActive={isActive} />
                         </div>
                     </motion.div>
                 )
@@ -111,33 +113,37 @@ const SidebarProvider = ({ children }) => {
 
 export default SidebarProvider
 
-const BottomNav = () => {
+const BottomNav = ({ isActive }) => {
+
     return (
         <div className="flex gap-4 w-fit">
-            {
-                BottomNavList.map((item, i) => (
-                    <TooltipProvider key={i}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Link
-                                    href={item.url}
-                                    className="px-2 py-1.5"
-                                >
-                                    <item.icon className="size-5" />
-                                </Link>
-                            </TooltipTrigger>
-                            <TooltipContent className={"w-fit"}>
-                                {item.name}
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                ))
+            {BottomNavList.map((item, i) => (
+                <TooltipProvider key={i}>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Link
+                                href={item.url}
+                                className={`
+                                    px-3 py-2 rounded-md transition-colors ${isActive(item.url) ?
+                                        "bg-blue-500 text-white dark:bg-blue-800" : ""
+                                    }`
+                                }
+                            >
+                                <item.icon className="size-4" />
+                            </Link>
+                        </TooltipTrigger>
+                        <TooltipContent className="w-fit">
+                            {item.name}
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            ))
             }
-        </div>
+        </div >
     )
 }
 
-const SidebarItems = ({ toggle }) => {
+const SidebarItems = ({ toggle, isActive }) => {
     const user = useRemindYouStore(store => store.user)
 
     const handleLogout = () => {
@@ -175,7 +181,9 @@ const SidebarItems = ({ toggle }) => {
                                                 transition={{ duration: 0.4, ease: "easeInOut" }}
                                                 className="flex w-fit"
                                             >
-                                                <span className="text-base font-medium whitespace-nowrap">
+                                                <span className={`text-base font-medium whitespace-nowrap ${isActive(item.url) ?
+                                                    "text-blue-500 dark:text-amber-500" : ""
+                                                    }`}>
                                                     {item.name}
                                                 </span>
                                             </motion.div>
