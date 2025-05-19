@@ -52,7 +52,7 @@ const DeleteTodo = ({ todoId, text, type, className, iconClassName }) => {
                             variant={"outline"}
                             size={text ? "default" : "icon"}
                             onClick={() => setOpen(true)}
-                            className={cn(className)}
+                            className={cn("dark:backdrop-blur-sm", className)}
                         >
                             <TrashIcon className={cn(iconClassName)} /> {text ?? text}
                         </Button>

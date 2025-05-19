@@ -55,7 +55,7 @@ const Profile = () => {
                             <span className="text-sm md:text-base font-medium pl-3 text-neutral-500">
                                 Name
                             </span>
-                            <span className="text-sm md:text-base border border-neutral-200 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
+                            <span className="text-sm md:text-base border border-neutral-200 dark:border-neutral-700 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
                                 {user?.name ?? "John doe"}
                             </span>
                         </div>
@@ -63,7 +63,7 @@ const Profile = () => {
                             <span className="text-sm md:text-base font-medium pl-3 text-neutral-500">
                                 Designation
                             </span>
-                            <span className="text-sm md:text-base border border-neutral-200 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
+                            <span className="text-sm md:text-base border border-neutral-200 dark:border-neutral-700 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
                                 {user?.designation ?? "Software Engineer"}
                             </span>
                         </div>
@@ -71,7 +71,7 @@ const Profile = () => {
                             <span className="text-sm md:text-base font-medium pl-3 text-neutral-500">
                                 Email
                             </span>
-                            <span className="text-sm md:text-base border border-neutral-200 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
+                            <span className="text-sm md:text-base border border-neutral-200 dark:border-neutral-700 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
                                 {user?.email ?? "abc@gmail.com"}
                             </span>
                         </div>
@@ -79,7 +79,7 @@ const Profile = () => {
                             <span className="text-sm md:text-base font-medium pl-3 text-neutral-500">
                                 Mobile
                             </span>
-                            <span className="text-sm md:text-base border border-neutral-200 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
+                            <span className="text-sm md:text-base border border-neutral-200 dark:border-neutral-700 px-4 py-3 bg-white dark:bg-neutral-800/50 rounded-lg">
                                 {user?.mobile ?? "9988776655"}
                             </span>
                         </div>
@@ -87,7 +87,7 @@ const Profile = () => {
                             <span className="text-sm md:text-base font-medium pl-3 text-neutral-500">
                                 About
                             </span>
-                            <span className="text-sm md:text-base border border-neutral-200 p-4 bg-white dark:bg-neutral-800/50 rounded-lg">
+                            <span className="text-sm md:text-base border border-neutral-200 dark:border-neutral-700 p-4 bg-white dark:bg-neutral-800/50 rounded-lg">
                                 {user?.description ?? "Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui odio natus magnam odit iste nostrum repellat asperiores beatae, enim magni, quos explicabo quisquam aut quas vel at. Facilis, odit dignissimos."}
                             </span>
                         </div>

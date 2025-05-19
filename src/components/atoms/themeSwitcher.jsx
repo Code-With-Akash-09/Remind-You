@@ -4,12 +4,12 @@ import { Button } from "@/ui/button"
 import { MoonStarIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher = ({ size = "icon" }) => {
 	const { theme, setTheme } = useTheme()
 
 	return (
 		<Button
-			size="icon"
+			size={size}
 			variant="outline"
 			suppressHydrationWarning
 			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

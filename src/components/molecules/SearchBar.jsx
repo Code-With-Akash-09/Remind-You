@@ -49,12 +49,12 @@ const SearchBar = ({ icon }) => {
             {
                 icon ?
                     <Button
-                        variant="custom"
-                        className={"rounded-lg bg-neutral-100"}
+                        variant="outline"
+                        className={"rounded-lg bg-neutral-100 dark:bg-neutral-900 hover:bg-neutral-200 dark:hover:bg-neutral-700"}
                         onClick={() => setOpen(true)}
                     >
                         <Search className="!size-4 text-neutral-700 dark:text-neutral-400" />
-                        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-neutral-50 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-neutral-200 dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800 px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
                             <span className="text-sm">⌘</span> K
                         </kbd>
                     </Button> : null

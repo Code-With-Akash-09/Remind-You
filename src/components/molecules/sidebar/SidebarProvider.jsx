@@ -3,6 +3,7 @@
 import { logout } from "@/actions/auth"
 import BackBtn from "@/atoms/BackBtn"
 import Logo from "@/atoms/logo"
+import ThemeSwitcher from "@/atoms/themeSwitcher"
 import UserAvatar from "@/atoms/userAvatar"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import { toastMessager } from "@/lib/utils"
@@ -189,6 +190,7 @@ const SidebarItems = ({ toggle, isActive }) => {
                     }
                 </ul>
                 <Separator />
+                <ThemeSwitcher size="default" />
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <div

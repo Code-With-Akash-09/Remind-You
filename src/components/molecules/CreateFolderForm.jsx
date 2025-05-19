@@ -76,7 +76,7 @@ const CreateFolderForm = ({ parentId, initialData = null, className, iconClassNa
                                     variant={"outline"}
                                     size={"icon"}
                                     onClick={(e) => handleEdit(e)}
-                                    className={cn(className)}
+                                    className={cn("dark:backdrop-blur-sm", className)}
                                 >
                                     <EditIcon className={cn(iconClassName)} />
                                 </Button>
