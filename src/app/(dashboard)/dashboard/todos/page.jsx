@@ -68,7 +68,7 @@ const Todos = () => {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 w-full h-full md:h-[calc(100%-140px)] overflow-y-auto scrollbar-hide">
-                        <div className="grid grid-cols-1 h-fit sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full gap-4">
+                        <div className="grid grid-cols-2 h-fit sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-2 md:gap-4">
                             {
                                 todos?.map((todo, i) => (
                                     <TodoCard key={i} todo={todo} />

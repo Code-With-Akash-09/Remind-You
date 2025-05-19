@@ -1,6 +1,6 @@
-import RecentActivity from "@/molecules/RecentActivity"
 import TodayTaskList from "@/molecules/TodayTaskList"
 import TodoChart from "@/molecules/TodoChart"
+import TotalTodoCount from "@/molecules/TotalTodoCount"
 
 const Dashboard = () => {
 	return (
@@ -20,13 +20,12 @@ const Dashboard = () => {
 							<span className="text-sm font-medium">Todays Tasks</span>
 							<TodayTaskList />
 						</div>
-						<div className="flex flex-col w-full h-fit border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+						<div className="flex flex-col w-full h-fit">
+							<TotalTodoCount />
+						</div>
+						<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
 							<span className="text-sm font-medium">Progress Chart</span>
 							<TodoChart />
-						</div>
-						<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md mb-4 md:mb-0">
-							<span className="text-sm font-medium">Recent Activities</span>
-							<RecentActivity />
 						</div>
 					</div>
 					<div className="hidden sm:flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-4 rounded-md md:col-span-2 lg:col-span-1">

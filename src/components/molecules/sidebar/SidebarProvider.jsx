@@ -3,6 +3,7 @@
 import { logout } from "@/actions/auth"
 import BackBtn from "@/atoms/BackBtn"
 import Logo from "@/atoms/logo"
+import ThemeSwitcher from "@/atoms/themeSwitcher"
 import UserAvatar from "@/atoms/userAvatar"
 import useMediaQuery from "@/hooks/useMediaQuery"
 import { toastMessager } from "@/lib/utils"
@@ -12,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Separator } from "@/ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { AnimatePresence, motion } from "framer-motion"
-import { HomeIcon, ListTodo, LogOut, MenuIcon, Search, UserIcon, UserRound } from "lucide-react"
+import { HomeIcon, ListTodo, LogOut, MenuIcon, UserIcon, UserRound } from "lucide-react"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
@@ -26,6 +27,8 @@ const SidebarProvider = ({ children }) => {
     const [isToggle, setIsToggle] = useState(false)
     const { todoId } = useParams()
     const isMD = useMediaQuery("(max-width: 768px)");
+    const isActive = (url) => url === pathname
+
 
     const getSectionTitle = (pathname) => {
         return SidebarNavList.find(item => item.url === pathname)?.name || ""
@@ -40,7 +43,7 @@ const SidebarProvider = ({ children }) => {
             {
                 isMD ? (
                     <div className="flex p-2 border border-neutral-200 dark:border-neutral-800 fixed z-10 bottom-2 rounded-xl inset-x-0 w-fit max-w-lg mx-auto bg-neutral-200 dark:bg-neutral-950">
-                        <BottomNav />
+                        <BottomNav isActive={isActive} />
                     </div>
                 ) : (
                     <motion.div
@@ -70,7 +73,7 @@ const SidebarProvider = ({ children }) => {
                                     )}
                                 </AnimatePresence>
                             </div>
-                            <SidebarItems toggle={isToggle} />
+                            <SidebarItems toggle={isToggle} isActive={isActive} />
                         </div>
                     </motion.div>
                 )
@@ -84,12 +87,7 @@ const SidebarProvider = ({ children }) => {
                         {getSectionTitle(pathname)}
                     </div>
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
-                        <span className="flex gap-2 items-center bg-neutral-100 dark:bg-neutral-800 rounded-md px-3 py-1.5 text-sm">
-                            <Search className="!size-4 text-neutral-700 dark:text-neutral-400" />
-                            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                                <span className="text-sm">⌘</span> K
-                            </kbd>
-                        </span>
+                        <SearchBar icon />
                         {
                             pathname !== `/dashboard/todos/todo/${todoId}` && (
                                 <>
@@ -102,7 +100,6 @@ const SidebarProvider = ({ children }) => {
                 </div>
                 <div className="flex flex-1 w-full p-3 items-start overflow-y-auto">
                     {children}
-                    <SearchBar />
                 </div>
             </div>
         </div>
@@ -111,33 +108,37 @@ const SidebarProvider = ({ children }) => {
 
 export default SidebarProvider
 
-const BottomNav = () => {
+const BottomNav = ({ isActive }) => {
+
     return (
         <div className="flex gap-4 w-fit">
-            {
-                BottomNavList.map((item, i) => (
-                    <TooltipProvider key={i}>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Link
-                                    href={item.url}
-                                    className="px-2 py-1.5"
-                                >
-                                    <item.icon className="size-5" />
-                                </Link>
-                            </TooltipTrigger>
-                            <TooltipContent className={"w-fit"}>
-                                {item.name}
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                ))
+            {BottomNavList.map((item, i) => (
+                <TooltipProvider key={i}>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Link
+                                href={item.url}
+                                className={`
+                                    px-3 py-2 rounded-md transition-colors ${isActive(item.url) ?
+                                        "bg-blue-500 text-white dark:bg-blue-800" : ""
+                                    }`
+                                }
+                            >
+                                <item.icon className="size-4" />
+                            </Link>
+                        </TooltipTrigger>
+                        <TooltipContent className="w-fit">
+                            {item.name}
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            ))
             }
-        </div>
+        </div >
     )
 }
 
-const SidebarItems = ({ toggle }) => {
+const SidebarItems = ({ toggle, isActive }) => {
     const user = useRemindYouStore(store => store.user)
 
     const handleLogout = () => {
@@ -175,7 +176,9 @@ const SidebarItems = ({ toggle }) => {
                                                 transition={{ duration: 0.4, ease: "easeInOut" }}
                                                 className="flex w-fit"
                                             >
-                                                <span className="text-base font-medium whitespace-nowrap">
+                                                <span className={`text-base font-medium whitespace-nowrap ${isActive(item.url) ?
+                                                    "text-blue-500 dark:text-amber-500" : ""
+                                                    }`}>
                                                     {item.name}
                                                 </span>
                                             </motion.div>
@@ -187,6 +190,7 @@ const SidebarItems = ({ toggle }) => {
                     }
                 </ul>
                 <Separator />
+                <ThemeSwitcher size="default" />
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <div

@@ -2,7 +2,7 @@
 
 import { createTodo, updateTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
-import { toastMessager } from "@/lib/utils"
+import { cn, toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog"
@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
 
-const CreateFolderForm = ({ parentId, initialData = null }) => {
+const CreateFolderForm = ({ parentId, initialData = null, className, iconClassName }) => {
 
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
@@ -76,8 +76,9 @@ const CreateFolderForm = ({ parentId, initialData = null }) => {
                                     variant={"outline"}
                                     size={"icon"}
                                     onClick={(e) => handleEdit(e)}
+                                    className={cn("dark:backdrop-blur-sm", className)}
                                 >
-                                    <EditIcon />
+                                    <EditIcon className={cn(iconClassName)} />
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent className="w-fit">

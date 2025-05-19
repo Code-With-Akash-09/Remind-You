@@ -45,6 +45,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
     const content = form.watch("content")
 
     const onSubmit = async (values) => {
+
         setLoading(true)
 
         const body = {
@@ -56,10 +57,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
 
         const fn = initialData ? updateTodo : createTodo
 
-        const { data = [], error, message } = await fn(body)
-
-        console.log(data, error, message);
-
+        const { data = [] } = await fn(body)
 
         if (data) {
             form.reset()
@@ -111,19 +109,19 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                 )
             }
             <Sheet open={open} onOpenChange={() => setOpen(false)}>
-                <SheetContent className={"sm:max-w-2xl"}>
+                <SheetContent className={"!max-w-2xl"}>
                     <SheetHeader>
                         <SheetTitle>Create Todo</SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col gap-4 w-full px-6">
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+                                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 w-full">
                                     <FormField
                                         control={form.control}
                                         name="label"
                                         render={({ field }) => (
-                                            <FormItem>
+                                            <FormItem className={"w-full col-span-1"}>
                                                 <FormLabel>File Name</FormLabel>
                                                 <FormControl>
                                                     <Input
@@ -140,7 +138,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         control={form.control}
                                         name="status"
                                         render={({ field }) => (
-                                            <FormItem>
+                                            <FormItem className={"w-full col-span-1"}>
                                                 <FormLabel>
                                                     Status
                                                 </FormLabel>
@@ -178,8 +176,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         control={form.control}
                                         name="startDate"
                                         render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Start Date</FormLabel>
+                                            <FormItem className={"w-full"}>
+                                                <FormLabel FormLabel > Start Date</FormLabel>
                                                 <Popover>
                                                     <PopoverTrigger asChild>
                                                         <FormControl>
@@ -220,8 +218,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         control={form.control}
                                         name="endDate"
                                         render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>End Date</FormLabel>
+                                            <FormItem className={"w-full"}>
+                                                <FormLabel FormLabel > End Date</FormLabel>
                                                 <Popover>
                                                     <PopoverTrigger asChild>
                                                         <FormControl>
@@ -262,7 +260,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         control={form.control}
                                         name="content"
                                         render={({ field }) => (
-                                            <FormItem className="w-full col-span-2">
+                                            <FormItem className={"w-full col-span-2"}>
                                                 <FormLabel>Content</FormLabel>
                                                 <FormControl>
                                                     <Editor
@@ -272,7 +270,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                                         output="html"
                                                         placeholder="Enter your content here"
                                                         editable
-                                                        editorClassName="focus:outline-none !h-[calc(100vh-380px)]"
+                                                        editorClassName="focus:outline-none !h-[calc(100vh-400px)]"
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -280,7 +278,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         )}
                                     />
                                 </div>
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+                                <div className="grid grid-cols-2 gap-4 w-full">
                                     <Button
                                         type="submit"
                                         disabled={loading}
@@ -300,10 +298,10 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                     </DialogClose>
                                 </div>
                             </form>
-                        </Form>
-                    </div>
-                </SheetContent>
-            </Sheet>
+                        </Form >
+                    </div >
+                </SheetContent >
+            </Sheet >
 
         </>
     )
