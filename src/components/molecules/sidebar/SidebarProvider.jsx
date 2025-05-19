@@ -12,7 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Separator } from "@/ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { AnimatePresence, motion } from "framer-motion"
-import { HomeIcon, ListTodo, LogOut, MenuIcon, Search, UserIcon, UserRound } from "lucide-react"
+import { HomeIcon, ListTodo, LogOut, MenuIcon, UserIcon, UserRound } from "lucide-react"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
@@ -86,12 +86,7 @@ const SidebarProvider = ({ children }) => {
                         {getSectionTitle(pathname)}
                     </div>
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
-                        <span className="flex gap-2 items-center bg-neutral-100 dark:bg-neutral-800 rounded-md px-3 py-1.5 text-sm">
-                            <Search className="!size-4 text-neutral-700 dark:text-neutral-400" />
-                            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                                <span className="text-sm">⌘</span> K
-                            </kbd>
-                        </span>
+                        <SearchBar icon />
                         {
                             pathname !== `/dashboard/todos/todo/${todoId}` && (
                                 <>
@@ -104,7 +99,6 @@ const SidebarProvider = ({ children }) => {
                 </div>
                 <div className="flex flex-1 w-full p-3 items-start overflow-y-auto">
                     {children}
-                    <SearchBar />
                 </div>
             </div>
         </div>
