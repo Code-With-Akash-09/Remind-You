@@ -69,7 +69,7 @@ const EditProfile = ({ user = null }) => {
                     <SheetHeader className={"border border-neutral-200 dark:border-neutral-800"}>
                         <SheetTitle>Edit Profile</SheetTitle>
                     </SheetHeader>
-                    <div className="flex w-full px-6">
+                    <div className="flex w-full px-4">
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4 py-4">
                                 <FormField
@@ -152,6 +152,7 @@ const EditProfile = ({ user = null }) => {
                                                 <Textarea
                                                     placeholder="Enter Your Description"
                                                     {...field}
+                                                    className={"h-40"}
                                                     value={field.value || ""}
                                                 />
                                             </FormControl>

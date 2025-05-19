@@ -31,7 +31,7 @@ const FolderCard = ({ todo }) => {
 
     return (
         <div
-            className="flex flex-col aspect-[3/1.4] md:aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-contain md:bg-cover bg-right md:bg-center bg-no-repeat hover:shadow-md border-amber-400 dark:border-amber-400/60 transition-all">
+            className="flex flex-col aspect-[3/1.8] md:aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/folder-bg.avif')] group bg-contain md:bg-cover bg-right md:bg-center bg-no-repeat hover:shadow-md border-amber-400 dark:border-amber-400/60 transition-all">
             <div
                 onClick={handleRedirect}
                 className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 dark:border-neutral-700 w-full p-2 md:p-4 gap-1 md:gap-2">
@@ -83,7 +83,7 @@ const FileCard = ({ todo }) => {
     }
 
     return (
-        <div className="flex flex-col aspect-[3/1.4] h-full md:aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-contain md:bg-cover bg-right md:bg-center bg-no-repeat hover:shadow-md border-blue-400 dark:border-blue-400/60 transition-all">
+        <div className="flex flex-col aspect-[3/1.8] h-full md:aspect-video cursor-pointer w-full border relative rounded-md bg-[url('/assets/banner-img/file-bg.avif')] group bg-contain md:bg-cover bg-right md:bg-center bg-no-repeat hover:shadow-md border-blue-400 dark:border-blue-400/60 transition-all">
             <div
                 onClick={handleRedirect}
                 className="flex flex-col justify-between flex-grow flex-1 border-b border-neutral-200 dark:border-neutral-700 w-full p-2 md:p-4 gap-1 md:gap-2">
