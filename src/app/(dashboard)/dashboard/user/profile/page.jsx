@@ -7,15 +7,18 @@ import EditProfile from "@/molecules/EditProfile"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 const Profile = () => {
 
     const user = useRemindYouStore(store => store.user)
+    const router = useRouter()
 
     const handleLogout = () => {
         logout()
             .then(() => {
                 toastMessager("Logged Out", 200)
+                router.push("/dashboard")
             })
             .catch(err => {
                 toastMessager("Failed to logout", 500)
