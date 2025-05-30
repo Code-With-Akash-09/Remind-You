@@ -2,7 +2,7 @@
 
 import { createTodo, updateTodo } from "@/actions/todo"
 import Loading from "@/atoms/loading"
-import { cn, toastMessager } from "@/lib/utils"
+import { cn, formatDateOnly, toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Calendar } from "@/ui/calendar"
@@ -23,7 +23,6 @@ import { z } from "zod"
 import Editor from "./editor"
 
 const CreateFileForm = ({ parentId, initialData = null }) => {
-
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
@@ -32,10 +31,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
         resolver: zodResolver(CreateFileSchema),
         defaultValues: {
             ...initialData,
-            startDate: initialData?.startDate ? new Date(initialData?.startDate) : null,
-            endDate: initialData?.endDate ? new Date(initialData?.endDate) : null,
         }
-    })
+    });
 
     const handleEdit = (e) => {
         e.stopPropagation()
@@ -52,6 +49,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
             ...values,
             todoId: initialData?.todoId,
             parentId: parentId,
+            startDate: values.startDate ? formatDateOnly(values.startDate) : null,
+            endDate: values.endDate ? formatDateOnly(values.endDate) : null,
             type: "file",
         }
 
@@ -177,7 +176,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         name="startDate"
                                         render={({ field }) => (
                                             <FormItem className={"w-full"}>
-                                                <FormLabel FormLabel > Start Date</FormLabel>
+                                                <FormLabel> Start Date</FormLabel>
                                                 <Popover>
                                                     <PopoverTrigger asChild>
                                                         <FormControl>
@@ -219,7 +218,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         name="endDate"
                                         render={({ field }) => (
                                             <FormItem className={"w-full"}>
-                                                <FormLabel FormLabel > End Date</FormLabel>
+                                                <FormLabel> End Date</FormLabel>
                                                 <Popover>
                                                     <PopoverTrigger asChild>
                                                         <FormControl>
@@ -284,7 +283,13 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         disabled={loading}
                                         className={"w-full"}
                                     >
-                                        {loading ? <Loading /> : "Create"}
+                                        {
+                                            loading ? (
+                                                <Loading />
+                                            ) : (
+                                                initialData ? "Update" : "Create"
+                                            )
+                                        }
                                     </Button>
                                     <DialogClose asChild>
                                         <Button
@@ -316,8 +321,8 @@ const CreateFileSchema = z.object({
         .regex(/^[a-zA-Z0-9 ]+$/, "Only letters, digits, and spaces are allowed.")
         .trim(),
     status: z.string().trim().optional(),
-    startDate: z.date().optional().nullish(),
-    endDate: z.date().optional().nullish(),
+    startDate: z.coerce.date().optional().nullish(),
+    endDate: z.coerce.date().optional().nullish(),
     content: z.string().optional().nullish(),
 })
 
