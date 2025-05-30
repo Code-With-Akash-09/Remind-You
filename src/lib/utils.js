@@ -164,3 +164,10 @@ export const toastMessager = (message, code) => {
 		toast.info(message)
 	}
 }
+
+export const formatDateOnly = (date) => {
+	const year = date.getFullYear();
+	const month = `${date.getMonth() + 1}`.padStart(2, "0");
+	const day = `${date.getDate()}`.padStart(2, "0");
+	return `${year}-${month}-${day}`;
+}
