@@ -1,9 +1,22 @@
+"use client";
+
 import { getTodosCount } from "@/actions/dashboard";
+import useRemindYouStore from "@/store";
+import { useEffect, useState } from "react";
 
-const TotalTodoCount = async () => {
+const TotalTodoCount = () => {
 
-    const resp = await getTodosCount();
-    const result = resp?.data?.result
+    const [result, setResult] = useState({})
+    const isAuthenticated = useRemindYouStore(state => state.isAuthenticated)
+
+    const getResult = async () => {
+        const { data = [] } = await getTodosCount()
+        setResult(data?.result)
+    }
+
+    useEffect(() => {
+        isAuthenticated ? getResult() : setResult({})
+    }, [isAuthenticated])
 
     return (
         <>
