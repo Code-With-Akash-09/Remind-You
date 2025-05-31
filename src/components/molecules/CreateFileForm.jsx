@@ -49,6 +49,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
             ...values,
             todoId: initialData?.todoId,
             parentId: parentId,
+            status: values.status || "not-started",
+            priority: values.priority || "no",
             startDate: values.startDate ? formatDateOnly(values.startDate) : null,
             endDate: values.endDate ? formatDateOnly(values.endDate) : null,
             type: "file",
@@ -108,19 +110,19 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                 )
             }
             <Sheet open={open} onOpenChange={() => setOpen(false)}>
-                <SheetContent className={"!max-w-2xl"}>
+                <SheetContent className={"!max-w-3xl"}>
                     <SheetHeader>
                         <SheetTitle>Create Todo</SheetTitle>
                     </SheetHeader>
-                    <div className="flex flex-col gap-4 w-full px-6">
+                    <div className="flex flex-col gap-4 w-full px-6 overflow-y-auto ">
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
-                                <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 w-full">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full h-fit pb-4 space-y-4">
+                                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                                     <FormField
                                         control={form.control}
                                         name="label"
                                         render={({ field }) => (
-                                            <FormItem className={"w-full col-span-1"}>
+                                            <FormItem className={"w-full col-span-2"}>
                                                 <FormLabel>File Name</FormLabel>
                                                 <FormControl>
                                                     <Input
@@ -154,6 +156,44 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                                     </FormControl>
                                                     <SelectContent className="max-h-40">
                                                         {TodoState.map(
+                                                            (item, i) => (
+                                                                <SelectItem
+                                                                    key={i}
+                                                                    value={
+                                                                        item.value
+                                                                    }
+                                                                >
+                                                                    {item.label}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="priority"
+                                        render={({ field }) => (
+                                            <FormItem className={"w-full col-span-1"}>
+                                                <FormLabel>
+                                                    Priority
+                                                </FormLabel>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    defaultValue={field.value}
+                                                >
+                                                    <FormControl className="w-full">
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="Select Priority" />
+                                                        </SelectTrigger>
+                                                    </FormControl>
+                                                    <SelectContent className="max-h-40">
+                                                        {Priority.map(
                                                             (item, i) => (
                                                                 <SelectItem
                                                                     key={i}
@@ -259,7 +299,7 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         control={form.control}
                                         name="content"
                                         render={({ field }) => (
-                                            <FormItem className={"w-full col-span-2"}>
+                                            <FormItem className={"w-full col-span-2 lg:col-span-3"}>
                                                 <FormLabel>Content</FormLabel>
                                                 <FormControl>
                                                     <Editor
@@ -321,6 +361,7 @@ const CreateFileSchema = z.object({
         .regex(/^[a-zA-Z0-9 ]+$/, "Only letters, digits, and spaces are allowed.")
         .trim(),
     status: z.string().trim().optional(),
+    priority: z.string().trim().optional(),
     startDate: z.coerce.date().optional().nullish(),
     endDate: z.coerce.date().optional().nullish(),
     content: z.string().optional().nullish(),
@@ -346,5 +387,24 @@ const TodoState = [
     {
         label: "Completed",
         value: "completed"
+    }
+]
+
+const Priority = [
+    {
+        label: "No",
+        value: "no"
+    },
+    {
+        label: "Low",
+        value: "low"
+    },
+    {
+        label: "Medium",
+        value: "medium"
+    },
+    {
+        label: "High",
+        value: "high"
     }
 ]
