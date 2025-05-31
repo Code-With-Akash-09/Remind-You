@@ -29,22 +29,22 @@ const updateChartData = (data) => {
     return [
         {
             todo: "no",
-            count: data.no,
+            count: data?.no ?? 0,
             fill: chartConfig.no.color
         },
         {
             todo: "low",
-            count: data.low,
+            count: data?.low ?? 0,
             fill: chartConfig.low.color
         },
         {
             todo: "mid",
-            count: data.mid,
+            count: data?.mid ?? 0,
             fill: chartConfig.mid.color
         },
         {
             todo: "high",
-            count: data.high,
+            count: data?.high ?? 0,
             fill: chartConfig.high.color
         },
     ];
