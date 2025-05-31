@@ -26,6 +26,11 @@ const TodoId = () => {
         return label
     }
 
+    const getPriority = (priority) => {
+        const label = Priority.find(item => item.value === priority)?.label
+        return label
+    }
+
     const getTodo = async () => {
         setLoading(true)
         const { data = [] } = await getTodoById(todoId)
@@ -107,6 +112,12 @@ const TodoId = () => {
                                 disabled
                             />
                             <InputWithLabel
+                                id="Priority"
+                                label={"Priority"}
+                                value={getPriority(todo?.priority)}
+                                disabled
+                            />
+                            <InputWithLabel
                                 id="Start Date"
                                 label={"Start Date"}
                                 value={
@@ -164,5 +175,24 @@ const TodoState = [
     {
         label: "Completed",
         value: "completed"
+    }
+]
+
+const Priority = [
+    {
+        label: "No",
+        value: "no"
+    },
+    {
+        label: "Low",
+        value: "low"
+    },
+    {
+        label: "Medium",
+        value: "medium"
+    },
+    {
+        label: "High",
+        value: "high"
     }
 ]

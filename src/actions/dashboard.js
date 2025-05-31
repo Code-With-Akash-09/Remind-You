@@ -25,3 +25,11 @@ export const getTodosCount = async () => {
 
     return resp;
 }
+
+export const getTodosByPriority = async () => {
+    const resp = await fetchClientWithToken(`/v1/todos/dashboard/priority`, {
+        method: "GET",
+    });
+
+    return resp;
+}
