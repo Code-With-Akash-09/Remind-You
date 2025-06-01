@@ -2,6 +2,7 @@ import TodayTaskList from "@/molecules/TodayTaskList"
 import TodoChart from "@/molecules/TodoChart"
 import TodoPriority from "@/molecules/TodoPriority"
 import TotalTodoCount from "@/molecules/TotalTodoCount"
+import { Skeleton } from "@/ui/skeleton"
 
 const Dashboard = () => {
 	return (
@@ -24,15 +25,19 @@ const Dashboard = () => {
 						<div className="flex flex-col w-full h-fit">
 							<TotalTodoCount />
 						</div>
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 w-full">
-							<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-fit w-full">
+							<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md md:col-span-2">
 								<span className="text-sm font-medium">Progress Chart</span>
 								<TodoChart />
 							</div>
-							<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+							<div className="flex flex-col w-full flex-grow border border-neutral-200 justify-between dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
 								<span className="text-sm font-medium">Priority Todos</span>
 								<TodoPriority />
 							</div>
+						</div>
+						<div className="flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+							<span className="text-sm font-medium">Todays Tasks</span>
+							<Skeleton className={"w-full h-full"} />
 						</div>
 					</div>
 					<div className="hidden sm:flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-4 rounded-md md:col-span-2 lg:col-span-1">

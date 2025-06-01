@@ -14,6 +14,7 @@ import { Separator } from "@/ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { AnimatePresence, motion } from "framer-motion"
 import { HomeIcon, ListTodo, LogOut, MenuIcon, UserIcon, UserRound } from "lucide-react"
+import { useTheme } from "next-themes"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
@@ -81,10 +82,10 @@ const SidebarProvider = ({ children }) => {
             <div className="flex flex-col flex-grow">
                 <div className="flex w-full justify-between p-3 border-b
                  border-neutral-200 dark:border-neutral-700">
-                    <div className="flex w-fit gap-2 md:gap-4 items-center font-bold text-2xl">
+                    <div className="flex w-fit gap-2 md:gap-4 items-center">
                         {todoId && <BackBtn />}
                         {!isToggle && <Logo isMobile={true} />}
-                        {getSectionTitle(pathname)}
+                        <span className="font-bold text-xl lg:text-2xl">{getSectionTitle(pathname)}</span>
                     </div>
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
                         <SearchBar icon />
@@ -140,6 +141,7 @@ const BottomNav = ({ isActive }) => {
 
 const SidebarItems = ({ toggle, isActive }) => {
     const user = useRemindYouStore(store => store.user)
+    const { theme } = useTheme()
 
     const handleLogout = () => {
         logout()
@@ -190,7 +192,28 @@ const SidebarItems = ({ toggle, isActive }) => {
                     }
                 </ul>
                 <Separator />
-                <ThemeSwitcher size="default" />
+                <div className="flex w-full gap-4">
+                    <ThemeSwitcher size="default" className="!px-3" />
+                    <AnimatePresence>
+                        {toggle && (
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -10 }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                className="flex w-fit items-center"
+                            >
+                                <span className="text-base font-medium whitespace-nowrap text-start w-fit">
+                                    {theme === "dark" ? (
+                                        "Dark"
+                                    ) : (
+                                        "Light"
+                                    )}
+                                </span>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger>
                         <div

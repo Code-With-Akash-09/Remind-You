@@ -62,7 +62,7 @@ const TodayTaskList = () => {
                             <Link
                                 key={todo?.todoId}
                                 href={`/dashboard/todos/todo/${todo?.todoId}`}
-                                className="grid grid-cols-5 flex-col p-2 gap-2 rounded-md group w-full border border-neutral-200 transition-all hover:border-neutral-300 dark:border-neutral-800"
+                                className="grid grid-cols-5 flex-col p-2 gap-2 rounded-md group w-full border border-neutral-200 transition-all hover:border-neutral-300 dark:border-neutral-600"
                             >
                                 <div className="flex w-full bg-amber-400 rounded-md items-center justify-center">
                                     <FileClockIcon className="text-white !size-5" />
@@ -71,7 +71,7 @@ const TodayTaskList = () => {
                                     <TodoStatusBadge
                                         status={todo?.status}
                                     />
-                                    <span className="text-sm line-clamp-1 font-medium text-neutral-700">
+                                    <span className="text-sm line-clamp-1 font-medium text-neutral-700 dark:text-neutral-300">
                                         {todo?.label}
                                     </span>
                                 </div>

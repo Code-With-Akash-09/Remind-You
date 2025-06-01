@@ -15,9 +15,9 @@ const ThemeSwitcher = ({ size = "icon" }) => {
 			onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
 		>
 			{theme === "dark" ? (
-				<MoonStarIcon className="size-4" />
+				<MoonStarIcon className="size-5" />
 			) : (
-				<SunIcon className="size-4" />
+				<SunIcon className="size-5" />
 			)}
 		</Button>
 	)
