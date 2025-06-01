@@ -7,9 +7,9 @@ import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { Calendar } from "@/ui/calendar"
 import { DialogClose } from "@/ui/dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/ui/dropdown-menu"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
 import { Input } from "@/ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@/ui/popover"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/ui/sheet"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
@@ -217,8 +217,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         render={({ field }) => (
                                             <FormItem className={"w-full"}>
                                                 <FormLabel> Start Date</FormLabel>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
                                                         <FormControl>
                                                             <Button
                                                                 variant={"outline"}
@@ -236,8 +236,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                             </Button>
                                                         </FormControl>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent
                                                         className="w-auto p-0"
                                                         align="start"
                                                     >
@@ -247,8 +247,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                                             onSelect={field.onChange}
                                                             initialFocus
                                                         />
-                                                    </PopoverContent>
-                                                </Popover>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -259,8 +259,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                         render={({ field }) => (
                                             <FormItem className={"w-full"}>
                                                 <FormLabel> End Date</FormLabel>
-                                                <Popover>
-                                                    <PopoverTrigger asChild>
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
                                                         <FormControl>
                                                             <Button
                                                                 variant={"outline"}
@@ -278,10 +278,10 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                                                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                                             </Button>
                                                         </FormControl>
-                                                    </PopoverTrigger>
-                                                    <PopoverContent
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent
                                                         className="w-auto p-0"
-                                                        align="start"
+                                                        align="end"
                                                     >
                                                         <Calendar
                                                             mode="single"
@@ -289,8 +289,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
                                                             onSelect={field.onChange}
                                                             initialFocus
                                                         />
-                                                    </PopoverContent>
-                                                </Popover>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
