@@ -24,7 +24,7 @@ const TotalTodoCount = () => {
 
     return (
         <>
-            <div className="w-full grid grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="w-full grid grid-cols-2 xl:grid-cols-6 gap-4">
                 {stats.map((stat) => (
                     <StatCard
                         key={stat.key}
@@ -46,7 +46,7 @@ const StatCard = ({ label, value, loading }) => (
         <span className="text-sm md:text-base font-normal text-neutral-700 dark:text-neutral-100">
             {label}
         </span>
-        <span className="text-lg md:text-xl font-semibold">
+        <span className="text-lg font-semibold">
             {loading ? <Skeleton className="h-4 lg:h-6" /> : value ?? 0}
         </span>
     </div>
