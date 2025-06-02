@@ -25,12 +25,12 @@ const Dashboard = () => {
 						<div className="flex flex-col w-full h-fit">
 							<TotalTodoCount />
 						</div>
-						<div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-fit w-full">
-							<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md md:col-span-2">
+						<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 h-fit w-full">
+							<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md md:col-span-2 lg:col-span-1 xl:col-span-2">
 								<span className="text-sm font-medium">Progress Chart</span>
 								<TodoChart />
 							</div>
-							<div className="flex flex-col w-full flex-grow border border-neutral-200 justify-between dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+							<div className="flex flex-col w-full flex-grow border border-neutral-200 justify-between dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md md:col-span-2 lg:col-span-1">
 								<span className="text-sm font-medium">Priority Todos</span>
 								<TodoPriority />
 							</div>
@@ -40,7 +40,7 @@ const Dashboard = () => {
 							<Skeleton className={"w-full h-full"} />
 						</div>
 					</div>
-					<div className="hidden sm:flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-4 rounded-md md:col-span-2 lg:col-span-1">
+					<div className="hidden md:flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-4 rounded-md md:col-span-2 lg:col-span-1">
 						<span className="text-sm font-medium">Todays Tasks</span>
 						<TodayTaskList />
 					</div>
