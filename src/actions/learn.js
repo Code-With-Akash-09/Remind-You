@@ -43,3 +43,11 @@ export const deleteLearn = async (learnId) => {
 
     return resp;
 }
+
+export const getAllLearnsPublic = async ({ parentId = null, page = 1, limit = 12 }) => {
+    const resp = await fetchClientWithoutToken(`/v1/learn/getAll/public?parentId=${parentId}&page=${page}&limit=${limit}`, {
+        method: "GET",
+    });
+
+    return resp;
+}
