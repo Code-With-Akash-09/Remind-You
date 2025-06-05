@@ -171,3 +171,9 @@ export const formatDateOnly = (date) => {
 	const day = `${date.getDate()}`.padStart(2, "0");
 	return `${year}-${month}-${day}`;
 }
+
+export const extractYouTubeVideoID = (url) => {
+	const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.*|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+	const match = url?.match(regex);
+	return match ? match[1] : null;
+}
