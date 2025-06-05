@@ -10,6 +10,8 @@ export const initialState = {
 	isAuthenticated: false,
 	todoCreated: false,
 	todoDeleted: false,
+	learnCreated: false,
+	learnDeleted: false,
 	queryParams: {},
 }
 

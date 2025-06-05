@@ -57,7 +57,7 @@ const PriorityChart = ({ data }) => {
 
     return (
         <>
-            <ChartContainer config={chartConfig}>
+            <ChartContainer config={chartConfig} className="h-full">
                 <BarChart accessibilityLayer data={chartData}>
                     <CartesianGrid vertical={false} />
                     <XAxis

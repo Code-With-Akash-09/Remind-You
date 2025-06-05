@@ -13,20 +13,22 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { Separator } from "@/ui/separator"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { AnimatePresence, motion } from "framer-motion"
-import { HomeIcon, ListTodo, LogOut, MenuIcon, UserIcon, UserRound } from "lucide-react"
+import { BookOpen, HomeIcon, ListTodo, LogOut, MenuIcon, UserIcon, UserRound } from "lucide-react"
 import { useTheme } from "next-themes"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { useState } from "react"
 import CreateFileForm from "../CreateFileForm"
 import CreateFolderForm from "../CreateFolderForm"
+import CreateLearnFileForm from "../CreateLearnFileForm"
+import CreateLearnFolderForm from "../CreateLearnFolderForm"
 import SearchBar from "../SearchBar"
 
 const SidebarProvider = ({ children }) => {
 
     const pathname = usePathname()
     const [isToggle, setIsToggle] = useState(false)
-    const { todoId } = useParams()
+    const { todoId, learnId } = useParams()
     const isMD = useMediaQuery("(max-width: 768px)");
     const isActive = (url) => url === pathname
 
@@ -83,17 +85,25 @@ const SidebarProvider = ({ children }) => {
                 <div className="flex w-full justify-between p-3 border-b
                  border-neutral-200 dark:border-neutral-700">
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
-                        {todoId && <BackBtn />}
+                        {(todoId || learnId) && <BackBtn />}
                         {!isToggle && <Logo isMobile={true} />}
                         <span className="font-bold text-xl lg:text-2xl">{getSectionTitle(pathname)}</span>
                     </div>
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
                         <SearchBar icon />
                         {
-                            pathname !== `/dashboard/todos/todo/${todoId}` && (
+                            (pathname === "/dashboard/todos" || pathname === `/dashboard/todos/${todoId}`) && (
                                 <>
                                     <CreateFolderForm parentId={todoId ?? null} />
                                     <CreateFileForm parentId={todoId ?? null} />
+                                </>
+                            )
+                        }
+                        {
+                            (pathname === "/dashboard/learns" || pathname === `/dashboard/learns/${learnId}`) && (
+                                <>
+                                    <CreateLearnFolderForm parentId={learnId ?? null} />
+                                    <CreateLearnFileForm parentId={learnId ?? null} />
                                 </>
                             )
                         }
@@ -288,6 +298,11 @@ const SidebarNavList = [
         url: "/dashboard/todos",
         icon: ListTodo,
     },
+    {
+        name: "Learn",
+        url: "/dashboard/learns",
+        icon: BookOpen,
+    },
 ]
 
 const BottomNavList = [
@@ -300,6 +315,11 @@ const BottomNavList = [
         name: "All Todos",
         url: "/dashboard/todos",
         icon: ListTodo,
+    },
+    {
+        name: "Learn",
+        url: "/dashboard/learns",
+        icon: BookOpen,
     },
     {
         name: "User Profile",
