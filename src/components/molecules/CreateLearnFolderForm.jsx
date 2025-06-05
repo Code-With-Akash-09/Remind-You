@@ -8,6 +8,7 @@ import { Button } from "@/ui/button"
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/ui/form"
 import { Input } from "@/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/ui/select"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/ui/tooltip"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { EditIcon, FolderPlusIcon } from "lucide-react"
@@ -122,6 +123,44 @@ const CreateLearnFolderForm = ({ parentId, initialData = null, className, iconCl
                                         </FormItem>
                                     )}
                                 />
+                                <FormField
+                                    control={form.control}
+                                    name="access"
+                                    render={({ field }) => (
+                                        <FormItem className={"w-full"}>
+                                            <FormLabel>
+                                                Access
+                                            </FormLabel>
+                                            <Select
+                                                onValueChange={
+                                                    field.onChange
+                                                }
+                                                defaultValue={field.value}
+                                            >
+                                                <FormControl className="w-full">
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select Access" />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent className="max-h-40">
+                                                    {VideoVisibility.map(
+                                                        (item, i) => (
+                                                            <SelectItem
+                                                                key={i}
+                                                                value={
+                                                                    item.value
+                                                                }
+                                                            >
+                                                                {item.label}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <div className="grid grid-cols-2 gap-4 w-full">
                                     <DialogClose asChild>
                                         <Button
@@ -163,4 +202,16 @@ const FolderSchema = z.object({
         .min(2, { message: "Folder Name is required" })
         .regex(/^[a-zA-Z0-9 ]+$/, "Only letters, digits, and spaces are allowed.")
         .trim(),
+    access: z.string().trim(),
 })
+
+const VideoVisibility = [
+    {
+        label: "Public",
+        value: "public"
+    },
+    {
+        label: "Private",
+        value: "private"
+    },
+]

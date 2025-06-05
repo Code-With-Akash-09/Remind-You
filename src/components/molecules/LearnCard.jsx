@@ -1,17 +1,19 @@
+"use client"
+
 import { format } from "date-fns"
 import { useRouter } from "next/navigation"
 import CreateLearnFileForm from "./CreateLearnFileForm"
 import CreateLearnFolderForm from "./CreateLearnFolderForm"
 import DeleteLearn from "./DeleteLearn"
 
-const LearnCard = ({ learn }) => {
+const LearnCard = ({ learn, global = false }) => {
     return (
         <>
             {
                 learn.type === "folder" ? (
-                    <FolderCard learn={learn} />
+                    <FolderCard learn={learn} global={global} />
                 ) : (
-                    <FileCard learn={learn} />
+                    <FileCard learn={learn} global={global} />
                 )
             }
         </>
@@ -21,12 +23,14 @@ const LearnCard = ({ learn }) => {
 export default LearnCard
 
 
-const FolderCard = ({ learn }) => {
+const FolderCard = ({ learn, global }) => {
 
     const router = useRouter()
 
     const handleRedirect = () => {
-        router.push(`/dashboard/learns/${learn.learnId}?parentId=${learn.parentId}`)
+        global ?
+            router.push(`/learning/${learn.learnId}`) :
+            router.push(`/dashboard/learns/${learn.learnId}?parentId=${learn.parentId}`)
     }
 
     return (
@@ -74,12 +78,13 @@ const FolderCard = ({ learn }) => {
     )
 }
 
-const FileCard = ({ learn }) => {
+const FileCard = ({ learn, global }) => {
 
     const router = useRouter()
 
     const handleRedirect = () => {
-        router.push(`/dashboard/learns/learn/${learn.learnId}`)
+        global ? router.push(`/learning/learn/${learn.learnId}`) :
+            router.push(`/dashboard/learns/learn/${learn.learnId}`)
     }
 
     return (
