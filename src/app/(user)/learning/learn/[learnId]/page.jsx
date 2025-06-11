@@ -2,7 +2,7 @@ import { getLearnById } from "@/actions/learn";
 
 const LearnId = async ({ params }) => {
 
-    const learnId = await params?.learnId
+    const { learnId } = await params
     const resp = await getLearnById(learnId)
     const learn = resp?.data?.result
 

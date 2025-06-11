@@ -1,8 +1,9 @@
 "use client"
 
-import { createLearn, updateLearn } from "@/actions/learn"
+import DragNDrop from "@/atoms/DragNDrop"
 import Loading from "@/atoms/loading"
-import { cn, extractYouTubeVideoID, toastMessager } from "@/lib/utils"
+import useTusUpload from "@/hooks/useTusUpload"
+import { cn, toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
 import { DialogClose } from "@/ui/dialog"
@@ -23,12 +24,14 @@ const CreateLearnFileForm = ({ parentId, initialData = null, className, iconClas
     const [loading, setLoading] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
 
+    const { handleFileForTus, startOrResumeUpload, pauseOrAbortUpload, toggleUpload, resetUpload, progress, uploadState } = useTusUpload()
+
     const form = useForm({
         resolver: zodResolver(CreateVideoFileSchema),
         defaultValues: {
             ...initialData,
-            videoUrl: `https://www.youtube.com/embed/${initialData?.videoUrl}`,
-        }
+        },
+        mode: "onChange"
     });
 
     const handleEdit = (e) => {
@@ -36,7 +39,19 @@ const CreateLearnFileForm = ({ parentId, initialData = null, className, iconClas
         setOpen(true)
     }
 
+    const handleInputChange = (e, props) => {
+        let { id: key, value, type, files } = e.target ? e.target : e
+        if (type === "file") {
+            if (files.length > 0) {
+                handleFileForTus(files[0])
+            }
+            return
+        }
+    }
+
     const onSubmit = async (values) => {
+
+        console.log(values);
 
         setLoading(true)
 
@@ -45,10 +60,10 @@ const CreateLearnFileForm = ({ parentId, initialData = null, className, iconClas
             learnId: initialData?.learnId,
             parentId: parentId,
             type: "file",
-            videoUrl: extractYouTubeVideoID(values.videoUrl),
         }
 
-        const fn = initialData ? updateLearn : createLearn
+        const fn = ""
+        // const fn = initialData ? updateLearn : createLearn 
 
         const { data = [] } = await fn(body)
 
@@ -167,23 +182,49 @@ const CreateLearnFileForm = ({ parentId, initialData = null, className, iconClas
                                             </FormItem>
                                         )}
                                     />
+                                    {/* <FormField
+                                        control={form.control}
+                                        name="videoUrl"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Upload Video</FormLabel>
+                                                <FormControl>
+                                                    <FileUpload
+                                                        value={field.value}
+                                                        onChange={field.onChange}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    /> */}
                                     <FormField
                                         control={form.control}
                                         name="videoUrl"
                                         render={({ field }) => (
-                                            <FormItem className={"w-full"}>
-                                                <FormLabel>Video Url</FormLabel>
+                                            <FormItem>
+                                                <FormLabel>Upload Video</FormLabel>
                                                 <FormControl>
-                                                    <Input
-                                                        placeholder="Enter Video Url"
-                                                        {...field}
-                                                        value={field.value || ""}
+                                                    <DragNDrop
+                                                        largeFileProtocol
+                                                        startUpload={startOrResumeUpload}
+                                                        progress={progress}
+                                                        cancelUpload={pauseOrAbortUpload}
+                                                        uploadState={uploadState}
+                                                        resetUpload={resetUpload}
+                                                        src={file}
+                                                        accept={field.types.recorded.accept}
+                                                        formats={field.types.recorded.formats}
+                                                        formatType={field.types.recorded.formatType}
+                                                        maxSize={0}
+                                                        onFileChange={handleInputChange}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
+
                                 </div>
                                 <div className="grid grid-cols-2 gap-4 w-full">
                                     <Button
@@ -222,6 +263,16 @@ const CreateLearnFileForm = ({ parentId, initialData = null, className, iconClas
 
 export default CreateLearnFileForm
 
+const fileSchema = z.object({
+    // id: z.number(),
+    // file: typeof window !== 'undefined' ? z.instanceof(File) : z.any(),
+    // name: z.string(),
+    // size: z.number(),
+    // type: z.string(),
+    // fileType: z.enum(['image', 'video', 'pdf']),
+    // preview: z.string().nullable(),
+    uploadedUrl: z.string().nullable(),
+});
 
 const CreateVideoFileSchema = z.object({
     label: z
@@ -230,7 +281,11 @@ const CreateVideoFileSchema = z.object({
         .regex(/^[a-zA-Z0-9 ]+$/, "Only letters, digits, and spaces are allowed.")
         .trim(),
     access: z.string().trim(),
-    videoUrl: z.string().trim(),
+    videoUrl: z
+        .union([fileSchema, z.null()])
+        .refine((file) => file !== null, {
+            message: "A file is required.",
+        })
 })
 
 const VideoVisibility = [
