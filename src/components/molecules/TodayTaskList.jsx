@@ -8,7 +8,7 @@ import { FileClockIcon, GhostIcon } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const TodayTaskList = () => {
+const TodayTaskList = ({ taskState }) => {
 
     const [loading, setLoading] = useState(false)
     const [todos, setTodos] = useState([])
@@ -18,7 +18,7 @@ const TodayTaskList = () => {
 
     const getTodos = async () => {
         setLoading(true)
-        const { data = [], error } = await getAllTodosByState("current")
+        const { data = [], error } = await getAllTodosByState(taskState)
 
         if (error) {
             setLoading(false)
@@ -53,7 +53,7 @@ const TodayTaskList = () => {
                             <div className="flex flex-col gap-6 flex-1 items-center justify-center py-4 w-full">
                                 <GhostIcon className="size-16 text-yellow-500" />
                                 <span className="text-lg text-center text-neutral-700 font-medium">
-                                    Your Todo list is empty for Today
+                                    Your Todo list is empty
                                 </span>
                             </div>
                         )
