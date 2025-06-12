@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/ui/button"
 import { ArrowLeftIcon } from "lucide-react"
 import { useRouter } from "next/navigation"

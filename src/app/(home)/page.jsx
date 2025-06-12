@@ -45,7 +45,7 @@ const Home = () => {
 						</div>
 					</div>
 
-					<div className="flex flex-col gap-4 w-full rounded-3xl bg-white border border-neutral-200 dark:border-neutral-800 max-w-7xl mx-auto h-fit p-4">
+					<div className="flex flex-col gap-4 w-full rounded-3xl   dark:bg-gradient-to-r dark:from-blue-600/10 dark:to-amber-600/10 border border-neutral-200 dark:border-neutral-800 max-w-7xl mx-auto h-fit p-4">
 						<div className="flex w-full justify-between">
 							<span className="text-sm md:text-base">Learning Videos</span>
 							<Link href={"/learning/"} className="flex gap-2 w-fit items-center text-blue-500">

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const LearnId = async ({ params }) => {
 
-    const learnId = await params?.learnId
+    const learnId = (await params).learnId
 
     const resp = await getAllLearnsPublic({
         parentId: learnId,
