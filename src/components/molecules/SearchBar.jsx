@@ -92,7 +92,7 @@ const SearchBar = ({ icon }) => {
                                                     className="gap-4 !px-4"
                                                     onClick={() => setOpen(false)}
                                                 >
-                                                    <Folder />
+                                                    <Folder className="!fill-amber-400" />
                                                     <span>{todo?.label}</span>
                                                 </Link>
                                             </CommandItem>
@@ -109,7 +109,7 @@ const SearchBar = ({ icon }) => {
                                                     className="gap-4 !px-4"
                                                     onClick={() => setOpen(false)}
                                                 >
-                                                    <File />
+                                                    <File className="!fill-blue-400" />
                                                     <span>{todo?.label}</span>
                                                 </Link>
                                             </CommandItem>
