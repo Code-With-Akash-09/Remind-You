@@ -52,16 +52,19 @@ const TodoDragNDrop = ({ todos, loading }) => {
         setDraggedTodo(null);
     };
 
+    console.log(todos.filter(todo => todo.type === "folder").length);
+
+
     const status = ["not-started", "in-progress", "completed", "cancelled", "backlog"]
 
     return (
         <>
-            <div className="h-[calc(100vh-200px)] flex gap-2 flex-col">
-                {
-                    todos.filter(todo => todo.type === "folder").length > 0 && (
-                        <div className="w-full gap-2 flex flex-col">
-                            <span className="text-sm font-medium">Todo Folders</span>
-                            <div className="flex w-full flex-none overflow-x-auto overflow-y-hidden scrollbar pb-2">
+            <div className="h-full flex gap-2 flex-col">
+                <div className="w-full gap-2 flex flex-col">
+                    <span className="text-sm font-medium">Todo Folders</span>
+                    {
+                        todos.filter(todo => todo.type === "folder").length > 0 ? (
+                            <div className="flex w-full h-40 flex-none overflow-x-auto overflow-y-hidden scrollbar pb-2">
                                 <div className={`flex w-fit gap-4 ${todos.filter(todo => todo.type === "folder").length <= 5 ? "lg:grid lg:grid-cols-5 lg:w-full" : "lg:flex"}`}>
                                     {
                                         todos.filter(todo => todo.type === "folder").map((todo, i) => (
@@ -73,9 +76,20 @@ const TodoDragNDrop = ({ todos, loading }) => {
                                     }
                                 </div>
                             </div>
-                        </div>
-                    )
-                }
+                        ) : (
+                            <div className="flex w-full h-40 pb-2">
+                                <div className="flex w-full flex-1 items-center justify-center">
+                                    <div className="flex flex-col w-full gap-4 items-center justify-center">
+                                        <GhostIcon className="size-16 text-yellow-500" />
+                                        <span className="text-lg text-center text-neutral-700 font-medium">
+                                            You have no Folders
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div>
                 <div className="w-full gap-2 flex h-full flex-col">
                     <span className="text-sm font-medium flex-grow-0">Todo File</span>
                     <div className="grid grid-cols-5 gap-4 h-full w-full">
