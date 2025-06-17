@@ -19,11 +19,11 @@ const Dashboard = () => {
 							</p>
 						</div>
 						<div className="flex md:hidden flex-col w-full h-fit border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
-							<span className="text-sm font-medium">Todays Tasks</span>
+							<span className="text-sm font-medium text-blue-600 dark:text-amber-500">Todays Tasks</span>
 							<TodayTaskList taskState={"current"} />
 						</div>
 						<div className="flex md:hidden flex-col w-full h-fit border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
-							<span className="text-sm font-medium">In Progress Tasks</span>
+							<span className="text-sm font-medium text-blue-600 dark:text-amber-500">In Progress Tasks</span>
 							<TodayTaskList taskState={"ongoing"} />
 						</div>
 						<div className="flex flex-col w-full h-fit">
@@ -31,26 +31,26 @@ const Dashboard = () => {
 						</div>
 						<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 h-fit w-full">
 							<div className="flex flex-col w-full flex-grow border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md md:col-span-2 lg:col-span-1 xl:col-span-2">
-								<span className="text-sm font-medium">Progress Chart</span>
+								<span className="text-sm font-medium text-blue-600 dark:text-amber-500">Progress Chart</span>
 								<TodoChart />
 							</div>
 							<div className="flex flex-col w-full flex-grow border border-neutral-200 justify-between dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md md:col-span-2 lg:col-span-1">
-								<span className="text-sm font-medium">Priority Todos</span>
+								<span className="text-sm font-medium text-blue-600 dark:text-amber-500">Priority Todos</span>
 								<TodoPriority />
 							</div>
 						</div>
 						<div className="flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
-							<span className="text-sm font-medium">Todays Tasks</span>
+							<span className="text-sm font-medium text-blue-600 dark:text-amber-500">Todays Tasks</span>
 							<Skeleton className={"w-full h-full"} />
 						</div>
 					</div>
-					<div className="hidden md:flex flex-col w-full h-full gap-4 md:col-span-2 lg:col-span-1">
-						<div className="flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
-							<span className="text-sm font-medium">Todays Tasks</span>
+					<div className="hidden md:flex flex-col w-full h-full gap-4 md:col-span-2 lg:col-span-1 overflow-hidden pb-4">
+						<div className="flex flex-col w-full md:h-1/2 border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+							<span className="text-sm font-medium text-blue-600 dark:text-amber-500">Todays Tasks</span>
 							<TodayTaskList taskState={"current"} />
 						</div>
-						<div className="flex flex-col w-full h-full border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
-							<span className="text-sm font-medium">In Progress Tasks</span>
+						<div className="flex flex-col w-full md:h-1/2 border border-neutral-200 dark:border-neutral-700 p-4 gap-2 md:gap-4 rounded-md">
+							<span className="text-sm font-medium text-blue-600 dark:text-amber-500">In Progress Tasks</span>
 							<TodayTaskList taskState={"ongoing"} />
 						</div>
 					</div>
