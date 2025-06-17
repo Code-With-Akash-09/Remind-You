@@ -55,22 +55,48 @@ const TodoDragNDrop = ({ todos, loading }) => {
     const status = ["not-started", "in-progress", "completed", "cancelled", "backlog"]
 
     return (
-        <div className="lg:grid lg:grid-cols-5 gap-4 h-full w-full">
-            {
-                status.map((status) => (
-                    <TodoListByStatus
-                        key={status}
-                        status={status}
-                        todos={todos}
-                        draggedTodo={draggedTodo}
-                        loading={loading}
-                        handleDragStart={handleDragStart}
-                        handleDragOver={handleDragOver}
-                        handleDrop={handleDrop}
-                    />
-                ))
-            }
-        </div>
+        <>
+            <div className="h-[calc(100vh-200px)] flex gap-2 flex-col">
+                {
+                    todos.filter(todo => todo.type === "folder").length > 0 && (
+                        <div className="w-full gap-2 flex flex-col">
+                            <span className="text-sm font-medium">Todo Folders</span>
+                            <div className="flex w-full flex-none overflow-x-auto overflow-y-hidden scrollbar pb-2">
+                                <div className={`flex w-fit gap-4 ${todos.filter(todo => todo.type === "folder").length <= 5 ? "lg:grid lg:grid-cols-5 lg:w-full" : "lg:flex"}`}>
+                                    {
+                                        todos.filter(todo => todo.type === "folder").map((todo, i) => (
+                                            <DragCard
+                                                key={i}
+                                                todo={todo}
+                                            />
+                                        ))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+                <div className="w-full gap-2 flex h-full flex-col">
+                    <span className="text-sm font-medium flex-grow-0">Todo File</span>
+                    <div className="grid grid-cols-5 gap-4 h-full w-full">
+                        {
+                            status.map((status) => (
+                                <TodoListByStatus
+                                    key={status}
+                                    status={status}
+                                    todos={todos.filter(todo => todo.type === "file")}
+                                    draggedTodo={draggedTodo}
+                                    loading={loading}
+                                    handleDragStart={handleDragStart}
+                                    handleDragOver={handleDragOver}
+                                    handleDrop={handleDrop}
+                                />
+                            ))
+                        }
+                    </div>
+                </div>
+            </div>
+        </>
     )
 }
 
@@ -93,8 +119,8 @@ const TodoListByStatus = ({
         <div
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, status)}
-            className={`flex flex-col w-full flex-1 gap-4 border rounded-lg ${todoStatus?.cardStyle}`}>
-            <div className={`flex w-full items-center flex-grow-0 rounded-md gap-2 py-3 font-semibold px-4 ${todoStatus?.className}`}>
+            className={`w-full flex flex-col h-full border rounded-lg ${todoStatus?.cardStyle}`}>
+            <div className={`flex w-full items-center rounded-md gap-2 py-3 font-semibold px-4 ${todoStatus?.className}`}>
                 <span>
                     {todoStatus?.label}
                 </span>
@@ -102,53 +128,43 @@ const TodoListByStatus = ({
                     {todos.filter((todo) => todo.status === status)?.length}
                 </span>
             </div>
-            <div className="flex w-full h-[calc(100%-170px)] overflow-y-auto scrollbar-hide">
-                <div className="flex flex-col gap-4 px-4 w-full">
-                    {
-                        todos?.length <= 0 ? (
-                            <>
-                                {
-                                    loading ? (
-                                        <div className="flex w-full relative h-[73px] border border-neutral-200 dark:border-neutral-700 rounded-md">
-                                            <Skeleton className={"w-full h-full"} />
-                                        </div>
-                                    ) : (
-                                        <div className="flex w-full flex-1 items-center justify-center">
-                                            <div className="flex flex-col w-full gap-4 items-center justify-center">
-                                                <GhostIcon className="size-16 text-yellow-500" />
-                                                <span className="text-lg text-center text-neutral-700 font-medium">
-                                                    You have no {todoStatus?.label}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    )
-                                }
-                            </>
-                        ) : (
-                            <>
-                                {
-                                    todos.filter((todo) => todo.status === status)?.map((todo, i) => (
-                                        <DragCard
-                                            key={i}
-                                            todo={todo}
-                                            handleDragStart={handleDragStart}
-                                        />
-                                    ))
-                                }
-                            </>
-                        )
-                    }
-                    {
-                        draggedTodo ? (
-                            <div className={`flex flex-col w-full p-4 items-center justify-center border rounded-md gap-2 backdrop-blur-sm ${todoStatus?.cardStyle}`}>
-                                <GripIcon className="text-neutral-700 dark:text-neutral-300" />
-                                <span className="text-sm text-neutral-700 dark:text-neutral-300">
-                                    Drop Here
-                                </span>
+            <div className={`flex flex-col gap-4 p-4 w-full h-full`}>
+                {
+                    todos?.length <= 0 ? (
+                        loading ? (
+                            <div className="flex w-full relative h-[73px] border border-neutral-200 dark:border-neutral-700 rounded-md">
+                                <Skeleton className={"w-full h-full"} />
                             </div>
-                        ) : null
-                    }
-                </div>
+                        ) : (
+                            <div className="flex w-full flex-1 items-center justify-center">
+                                <div className="flex flex-col w-full gap-4 items-center justify-center">
+                                    <GhostIcon className="size-16 text-yellow-500" />
+                                    <span className="text-lg text-center text-neutral-700 font-medium">
+                                        You have no {todoStatus?.label}
+                                    </span>
+                                </div>
+                            </div>
+                        )
+                    ) : (
+                        todos.filter((todo) => todo.status === status)?.map((todo, i) => (
+                            <DragCard
+                                key={i}
+                                todo={todo}
+                                handleDragStart={handleDragStart}
+                            />
+                        ))
+                    )
+                }
+                {
+                    draggedTodo ? (
+                        <div className={`flex flex-col w-full p-4 items-center justify-center border rounded-md gap-2 backdrop-blur-sm ${todoStatus?.cardStyle}`}>
+                            <GripIcon className="text-neutral-700 dark:text-neutral-300" />
+                            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+                                Drop Here
+                            </span>
+                        </div>
+                    ) : null
+                }
             </div>
         </div>
     )
