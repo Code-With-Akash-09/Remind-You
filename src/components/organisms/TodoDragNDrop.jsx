@@ -52,65 +52,60 @@ const TodoDragNDrop = ({ todos, loading }) => {
         setDraggedTodo(null);
     };
 
-    console.log(todos.filter(todo => todo.type === "folder").length);
-
-
     const status = ["not-started", "in-progress", "completed", "cancelled", "backlog"]
 
     return (
-        <>
-            <div className="h-full flex gap-2 flex-col">
-                <div className="w-full gap-2 flex flex-col">
-                    <span className="text-sm font-medium">Todo Folders</span>
+        <div className="flex flex-col gap-4 w-full h-[calc(100vh-140px)] overflow-hidden">
+            <div className="w-full gap-2 flex flex-col">
+                <span className="text-sm font-medium">Todo Folders</span>
+                {
+                    todos.filter(todo => todo.type === "folder").length > 0 ? (
+                        <div className="flex w-full overflow-x-auto scrollbar-hide">
+                            <div className={`flex h-full gap-4 ${todos.filter(todo => todo.type === "folder").length <= 5 ? "lg:grid lg:grid-cols-5 w-full" : "w-fit"}`}>
+                                {
+                                    todos.filter(todo => todo.type === "folder").map((todo, i) => (
+                                        <DragCard
+                                            key={i}
+                                            todo={todo}
+                                        />
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex w-full h-36 bg-neutral-100 border border-neutral-200 dark:border-neutral-700 dark:bg-neutral-800  rounded-lg">
+                            <div className="flex w-full flex-1 items-center justify-center">
+                                <div className="flex flex-col w-full gap-4 items-center justify-center">
+                                    <GhostIcon className="size-16 text-yellow-500" />
+                                    <span className="text-lg text-center text-neutral-600 font-medium">
+                                        You have no Folders
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+            </div>
+            <div className="w-full gap-2 flex flex-1 flex-col">
+                <span className="text-sm font-medium flex-grow-0">Todo File</span>
+                <div className="grid grid-cols-5 gap-4 flex-1 w-full">
                     {
-                        todos.filter(todo => todo.type === "folder").length > 0 ? (
-                            <div className="flex w-full h-40 flex-none overflow-x-auto overflow-y-hidden scrollbar pb-2">
-                                <div className={`flex w-fit gap-4 ${todos.filter(todo => todo.type === "folder").length <= 5 ? "lg:grid lg:grid-cols-5 lg:w-full" : "lg:flex"}`}>
-                                    {
-                                        todos.filter(todo => todo.type === "folder").map((todo, i) => (
-                                            <DragCard
-                                                key={i}
-                                                todo={todo}
-                                            />
-                                        ))
-                                    }
-                                </div>
-                            </div>
-                        ) : (
-                            <div className="flex w-full h-40 pb-2">
-                                <div className="flex w-full flex-1 items-center justify-center">
-                                    <div className="flex flex-col w-full gap-4 items-center justify-center">
-                                        <GhostIcon className="size-16 text-yellow-500" />
-                                        <span className="text-lg text-center text-neutral-700 font-medium">
-                                            You have no Folders
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        )
+                        status.map((status) => (
+                            <TodoListByStatus
+                                key={status}
+                                status={status}
+                                todos={todos.filter(todo => todo.type === "file")}
+                                draggedTodo={draggedTodo}
+                                loading={loading}
+                                handleDragStart={handleDragStart}
+                                handleDragOver={handleDragOver}
+                                handleDrop={handleDrop}
+                            />
+                        ))
                     }
                 </div>
-                <div className="w-full gap-2 flex h-full flex-col">
-                    <span className="text-sm font-medium flex-grow-0">Todo File</span>
-                    <div className="grid grid-cols-5 gap-4 h-full w-full">
-                        {
-                            status.map((status) => (
-                                <TodoListByStatus
-                                    key={status}
-                                    status={status}
-                                    todos={todos.filter(todo => todo.type === "file")}
-                                    draggedTodo={draggedTodo}
-                                    loading={loading}
-                                    handleDragStart={handleDragStart}
-                                    handleDragOver={handleDragOver}
-                                    handleDrop={handleDrop}
-                                />
-                            ))
-                        }
-                    </div>
-                </div>
             </div>
-        </>
+        </div>
     )
 }
 
@@ -133,7 +128,7 @@ const TodoListByStatus = ({
         <div
             onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, status)}
-            className={`w-full flex flex-col h-full border rounded-lg ${todoStatus?.cardStyle}`}>
+            className={`w-full flex flex-col flex-1 border rounded-lg ${todoStatus?.cardStyle}`}>
             <div className={`flex w-full items-center rounded-md gap-2 py-3 font-semibold px-4 ${todoStatus?.className}`}>
                 <span>
                     {todoStatus?.label}
@@ -142,9 +137,9 @@ const TodoListByStatus = ({
                     {todos.filter((todo) => todo.status === status)?.length}
                 </span>
             </div>
-            <div className={`flex flex-col gap-4 p-4 w-full h-full`}>
+            <div className={`flex flex-col gap-4 p-4 w-full h-[calc(100vh-410px)] overflow-y-auto`}>
                 {
-                    todos?.length <= 0 ? (
+                    todos?.filter(todo => todo.status === status).length <= 0 ? (
                         loading ? (
                             <div className="flex w-full relative h-[73px] border border-neutral-200 dark:border-neutral-700 rounded-md">
                                 <Skeleton className={"w-full h-full"} />
