@@ -37,7 +37,7 @@ const TodoId = () => {
         else if (filter === "none") {
             return [...todos]
         }
-    }, [filter])
+    }, [todos, filter])
 
     const getTodos = async () => {
         setLoading(true)
