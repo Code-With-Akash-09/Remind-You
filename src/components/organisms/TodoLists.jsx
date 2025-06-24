@@ -7,7 +7,7 @@ const TodoLists = ({ todos, loading }) => {
         <>
             {
                 todos?.length <= 0 ? (
-                    <div className="size-full flex items-center bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-600/10 dark:to-amber-600/10 justify-center rounded-md">
+                    <div className="w-full h-[calc(100vh-140px)] flex items-center bg-gradient-to-r from-blue-50 to-amber-50 dark:from-blue-600/10 dark:to-amber-600/10 justify-center rounded-md">
                         <div className="flex flex-col gap-4 w-full max-w-sm items-center justify-center">
                             {
                                 loading ? <Loading /> : (

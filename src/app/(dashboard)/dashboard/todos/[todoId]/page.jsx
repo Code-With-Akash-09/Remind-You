@@ -45,9 +45,9 @@ const TodoId = () => {
 
     return (
         <div className="size-full flex">
-            <div className="hidden lg:flex flex-1 h-full w-full">
-                <Tabs defaultValue="grid" className={"flex-1 h-full w-full"}>
-                    <TabsList className={"w-full !h-10"}>
+            <div className="hidden lg:block w-full">
+                <Tabs defaultValue="grid" className={"flex-1"}>
+                    <TabsList className={"w-fit !h-10"}>
                         <TabsTrigger value="grid">
                             <List />
                         </TabsTrigger>
@@ -55,11 +55,15 @@ const TodoId = () => {
                             <Grid2X2 />
                         </TabsTrigger>
                     </TabsList>
-                    <TabsContent value="grid" className={"w-full h-auto"}>
-                        <TodoLists  {...{ todos, loading }} />
+                    <TabsContent value="grid">
+                        <div className="flex flex-1 w-full">
+                            <TodoLists  {...{ todos, loading }} />
+                        </div>
                     </TabsContent>
-                    <TabsContent value="table" className={"w-full h-full py-2"}>
-                        <TodoDragNDrop  {...{ todos, loading }} />
+                    <TabsContent value="table">
+                        <div className="flex flex-1 w-full">
+                            <TodoDragNDrop  {...{ todos, loading }} />
+                        </div>
                     </TabsContent>
                 </Tabs>
             </div>
