@@ -1,6 +1,7 @@
 "use client"
 
 import { getAllTodos } from "@/actions/todo"
+import DeleteTodo from "@/molecules/DeleteTodo"
 import TodoDragNDrop from "@/organisms/TodoDragNDrop"
 import TodoLists from "@/organisms/TodoLists"
 import useRemindYouStore from "@/store"
@@ -9,7 +10,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/ui/dro
 import { Label } from "@/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/ui/radio-group"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/tabs"
-import { CheckIcon, FilterIcon, Grid2X2, List } from "lucide-react"
+import { CheckIcon, CheckSquare2, FilterIcon, Grid2X2, List, Square } from "lucide-react"
 import { useParams } from "next/navigation"
 import { useEffect, useMemo, useState } from "react"
 
@@ -18,6 +19,7 @@ const TodoId = () => {
     const { todoId } = useParams()
     const [todos, setTodos] = useState([])
     const [loading, setLoading] = useState(false)
+    const [selectedIds, setSelectedIds] = useState([])
     const dispatch = useRemindYouStore((state) => state.dispatch)
     const todoCreated = useRemindYouStore((state) => state.todoCreated)
     const todoDeleted = useRemindYouStore((state) => state.todoDeleted)
@@ -26,6 +28,23 @@ const TodoId = () => {
     const handleFilterChange = (value) => {
         setFilter(value)
     }
+
+    const handleCardSelect = (todoId) => {
+        setSelectedIds(prev =>
+            prev.includes(todoId)
+                ? prev.filter(item => item !== todoId)
+                : [...prev, todoId]
+        );
+    };
+
+    const handleToggleSelect = () => {
+        if (selectedIds.length === todos.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(todos.map(todo => todo.todoId));
+        }
+    };
+
 
     const sortedTodos = useMemo(() => {
         if (filter === "az") {
@@ -65,6 +84,26 @@ const TodoId = () => {
         getTodos()
     }, [todoCreated, todoDeleted])
 
+    useEffect(() => {
+        const down = (e) => {
+            if (e.key === "a" && (e.metaKey || e.ctrlKey)) {
+                if (
+                    (e.target instanceof HTMLElement && e.target.isContentEditable) ||
+                    e.target instanceof HTMLInputElement ||
+                    e.target instanceof HTMLTextAreaElement ||
+                    e.target instanceof HTMLSelectElement
+                ) {
+                    return
+                }
+                e.preventDefault()
+                handleToggleSelect()
+            }
+        }
+
+        document.addEventListener("keydown", down)
+        return () => document.removeEventListener("keydown", down)
+    }, [selectedIds])
+
     return (
         <div className="size-full flex">
             <div className="hidden lg:flex w-full">
@@ -78,10 +117,29 @@ const TodoId = () => {
                                 <Grid2X2 />
                             </TabsTrigger>
                         </TabsList>
-                        <div className="flex w-fit">
+                        <div className="flex w-fit gap-2">
+                            {
+                                selectedIds?.length > 0 && (
+                                    <DeleteTodo
+                                        todoIds={selectedIds}
+                                        variant="destructive"
+                                        type={"file"}
+                                        multiple={true}
+                                    />
+                                )
+                            }
+                            <Button
+                                variant={selectedIds?.length >= 5 ? "default" : "outline"}
+                                size={"icon"}
+                                onClick={() => handleToggleSelect()}
+                            >
+                                {
+                                    selectedIds?.length >= 5 ? <CheckSquare2 className="!size-4" /> : <Square className="!size-4" />
+                                }
+                            </Button>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button size={"icon"}>
+                                    <Button size={"icon"} className={"!px-1 !py-1"}>
                                         <FilterIcon className="!size-4" />
                                     </Button>
                                 </DropdownMenuTrigger>
@@ -115,18 +173,30 @@ const TodoId = () => {
                     </div>
                     <TabsContent value="grid">
                         <div className="flex flex-1 w-full">
-                            <TodoLists  {...{ todos: sortedTodos, loading }} />
+                            <TodoLists
+                                todos={sortedTodos}
+                                loading={loading}
+                                selectedIds={selectedIds}
+                                handleCardSelect={handleCardSelect}
+                            />
                         </div>
                     </TabsContent>
                     <TabsContent value="table">
                         <div className="flex flex-1 w-full">
-                            <TodoDragNDrop  {...{ todos: sortedTodos, loading }} />
+                            <TodoDragNDrop
+                                todos={sortedTodos}
+                                loading={loading}
+                            />
                         </div>
                     </TabsContent>
                 </Tabs>
             </div>
             <div className="flex lg:hidden w-full h-full">
-                <TodoLists  {...{ todos, loading }} />
+                <TodoLists
+                    todos={sortedTodos}
+                    loading={loading}
+                    handleCardSelect={handleCardSelect}
+                />
             </div>
         </div>
     )

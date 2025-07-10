@@ -43,3 +43,14 @@ export const deleteTodo = async (todoId) => {
 
     return resp;
 }
+
+export const deleteTodos = async (body) => {
+    console.log(body);
+
+    const resp = await fetchClientWithToken("/v1/todos/multiple/delete", {
+        method: "DELETE",
+        body,
+    });
+
+    return resp;
+}
