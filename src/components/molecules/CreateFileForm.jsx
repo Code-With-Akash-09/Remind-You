@@ -51,8 +51,8 @@ const CreateFileForm = ({ parentId, initialData = null }) => {
             parentId: parentId,
             status: values.status || "not-started",
             priority: values.priority || "no",
-            startDate: values.startDate ? formatDateOnly(values.startDate) : null,
-            endDate: values.endDate ? formatDateOnly(values.endDate) : null,
+            startDate: values.startDate ? formatDateOnly(values.startDate) : new Date().setUTCHours(0, 0, 0, 0),
+            endDate: values.endDate ? formatDateOnly(values.endDate) : new Date().setUTCHours(23, 59, 59, 59),
             type: "file",
         }
 
