@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteTodo } from "@/actions/todo"
+import { deleteTodo, deleteTodos } from "@/actions/todo"
 import { cn, toastMessager } from "@/lib/utils"
 import useRemindYouStore from "@/store"
 import { Button } from "@/ui/button"
@@ -11,7 +11,7 @@ import { TrashIcon } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { useState } from "react"
 
-const DeleteTodo = ({ todoId, text, type, className, iconClassName }) => {
+const DeleteTodo = ({ todoId, text, type, variant = "outline", className, iconClassName, multiple = false, todoIds = [] }) => {
 
     const [open, setOpen] = useState(false)
     const dispatch = useRemindYouStore((state) => state.dispatch)
@@ -19,7 +19,11 @@ const DeleteTodo = ({ todoId, text, type, className, iconClassName }) => {
     const pathname = usePathname()
 
     const handleDelete = async () => {
-        await deleteTodo(todoId)
+
+        const fn = multiple ? deleteTodos : deleteTodo
+        const data = multiple ? { todoIds } : todoId
+
+        await fn(data)
             .then(result => {
 
                 const { data: { code, message, error } = null } = result
@@ -49,7 +53,7 @@ const DeleteTodo = ({ todoId, text, type, className, iconClassName }) => {
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
-                            variant={"outline"}
+                            variant={variant}
                             size={text ? "default" : "icon"}
                             onClick={() => setOpen(true)}
                             className={cn("dark:backdrop-blur-sm", className)}

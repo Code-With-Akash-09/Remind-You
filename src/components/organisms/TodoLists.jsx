@@ -1,8 +1,8 @@
-import Loading from "@/atoms/loading"
-import TodoCard from "@/molecules/TodoCard"
-import Image from "next/image"
+import Loading from "@/atoms/loading";
+import TodoCard from "@/molecules/TodoCard";
+import Image from "next/image";
 
-const TodoLists = ({ todos, loading }) => {
+const TodoLists = ({ todos, loading, selectedIds = [], handleCardSelect }) => {
     return (
         <>
             {
@@ -35,7 +35,14 @@ const TodoLists = ({ todos, loading }) => {
                         <div className="grid grid-cols-2 h-fit sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full gap-2 md:gap-4">
                             {
                                 todos?.map((todo, i) => (
-                                    <TodoCard key={i} todo={todo} />
+                                    <TodoCard
+                                        key={i}
+                                        todo={todo}
+                                        isTodoChecked={
+                                            selectedIds.length > 0 ? selectedIds.includes(todo.todoId) : false
+                                        }
+                                        handleCardSelect={handleCardSelect}
+                                    />
                                 ))
                             }
                         </div>
