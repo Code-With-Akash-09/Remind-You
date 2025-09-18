@@ -28,13 +28,16 @@ const SidebarProvider = ({ children }) => {
 
     const pathname = usePathname()
     const [isToggle, setIsToggle] = useState(false)
-    const { todoId, learnId } = useParams()
+    const { todoId, learnId, statusId } = useParams()
     const isMD = useMediaQuery("(max-width: 768px)");
     const isActive = (url) => url === pathname
 
-
     const getSectionTitle = (pathname) => {
-        return SidebarNavList.find(item => item.url === pathname)?.name || ""
+        const section = PageTitle
+            .sort((a, b) => b.url.length - a.url.length)
+            .find(item => pathname.startsWith(item.url))
+
+        return section?.name || ""
     }
 
     const toggleSidebar = () => {
@@ -85,9 +88,12 @@ const SidebarProvider = ({ children }) => {
                 <div className="flex w-full justify-between p-3 border-b
                  border-neutral-200 dark:border-neutral-700">
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
-                        {(todoId || learnId) && <BackBtn />}
+                        {(todoId || learnId || statusId) && <BackBtn />}
                         {!isToggle && <Logo isMobile={true} />}
-                        <span className="font-bold text-xl lg:text-2xl">{getSectionTitle(pathname)}</span>
+                        <span className="font-bold text-xl lg:text-2xl">
+                            {getSectionTitle(pathname)}-
+                            {statusId && TodoState.find(item => item.value === statusId)?.label}
+                        </span>
                     </div>
                     <div className="flex w-fit gap-2 md:gap-4 items-center">
                         <SearchBar icon />
@@ -287,6 +293,29 @@ const SidebarItems = ({ toggle, isActive }) => {
     )
 }
 
+const PageTitle = [
+    {
+        name: "Dashboard",
+        url: "/dashboard",
+    },
+    {
+        name: "All Todos",
+        url: "/dashboard/todos",
+    },
+    {
+        name: "Todo",
+        url: "/dashboard/todos/todo",
+    },
+    {
+        name: "Learn",
+        url: "/dashboard/learns",
+    },
+    {
+        name: "Status",
+        url: "/dashboard/todos/status",
+    }
+]
+
 const SidebarNavList = [
     {
         name: "Dashboard",
@@ -326,4 +355,31 @@ const BottomNavList = [
         url: "/dashboard/user/profile",
         icon: UserIcon,
     },
+]
+
+const TodoState = [
+    {
+        label: "All",
+        value: "all"
+    },
+    {
+        label: "Backlog",
+        value: "backlog"
+    },
+    {
+        label: "Cancelled",
+        value: "cancelled"
+    },
+    {
+        label: "Not Started",
+        value: "not-started",
+    },
+    {
+        label: "In Progress",
+        value: "in-progress"
+    },
+    {
+        label: "Completed",
+        value: "completed"
+    }
 ]
