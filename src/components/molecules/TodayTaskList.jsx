@@ -35,7 +35,7 @@ const TodayTaskList = ({ taskState }) => {
     }, [isAuthenticated])
 
     useEffect(() => {
-        isAuthenticated ? getTodos() : setTodos([])
+        isAuthenticated && (todoCreated || todoDeleted) ? getTodos() : setTodos([])
     }, [todoCreated, todoDeleted])
 
     return (
